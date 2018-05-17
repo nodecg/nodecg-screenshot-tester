@@ -1,13 +1,16 @@
 {
   "name": "nodecg-screenshot-tester",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Easily create visual regression tests for your NodeCG graphics.",
   "main": "dist/index.js",
   "scripts": {
     "test": "npm run static",
     "static": "tslint -c tslint.json 'src/**/*.ts'",
     "prebuild": "npm run test",
-    "build": "trash dist && tsc -p tsconfig.json"
+    "build": "trash dist && tsc -p tsconfig.json",
+    "prerelease": "npm t",
+    "release": "standard-version",
+    "postrelease": "npm publish && git push --follow-tags"
   },
   "author": "Alex Van Camp <email@alexvan.camp>",
   "license": "MIT",
