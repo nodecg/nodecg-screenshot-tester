@@ -1,0 +1,105 @@
+#!/usr/bin/env node
+'use strict';
+
+// Native
+import * as fs from 'fs';
+import * as path from 'path';
+
+// Packages
+import {argv} from 'yargs';
+import * as ora from 'ora';
+import pEachSeries = require('p-each-series');
+import pixelmatch = require('pixelmatch');
+import {PNG} from 'pngjs';
+import * as puppeteer from 'puppeteer';
+import * as tmp from 'tmp';
+
+const DEBUG = argv.debug;
+
+// Ours
+import * as server from '../screenshot-server';
+import {CONSTS, TestCase} from '../screenshot-consts';
+import {screenshotGraphic, computeFullTestCaseName} from '../screenshot-taker';
+
+const tmpDir = tmp.dirSync({unsafeCleanup: true}).name;
+
+server.open().then(async () => {
+	const browser = await puppeteer.launch({
+		...CONSTS.PUPPETEER_LAUNCH_OPTS,
+		headless: !DEBUG
+	});
+
+	await pEachSeries(CONSTS.TEST_CASES, async (testCase: TestCase) => {
+		const testCaseFileName = computeFullTestCaseName(testCase);
+		const spinner = ora().start();
+		const page = await browser.newPage();
+		page.setViewport({width: CONSTS.WIDTH, height: CONSTS.HEIGHT});
+
+		try {
+			await screenshotGraphic(page, testCase, {
+				spinner,
+				destinationDir: tmpDir,
+				debug: DEBUG
+			});
+
+			const newScreenshotPath = path.join(tmpDir, `${testCaseFileName}.png`);
+			const existingScreenshotPath = path.join(CONSTS.FIXTURE_SCREENSHOTS_DIR, `${testCaseFileName}.png`);
+
+			if (fs.existsSync(existingScreenshotPath)) {
+				const unchanged = await areScreenshotsIdentical(
+					newScreenshotPath,
+					existingScreenshotPath
+				);
+
+				if (unchanged) {
+					spinner.info(`${testCaseFileName} screenshot unchanged.`);
+				} else {
+					spinner.text = 'Screenshot changed, updating fixture...';
+					fs.copyFileSync(newScreenshotPath, existingScreenshotPath);
+					spinner.succeed(`${testCaseFileName} screenshot updated!`);
+				}
+			} else {
+				spinner.text = 'Screenshot is new, adding fixture...';
+				fs.copyFileSync(newScreenshotPath, existingScreenshotPath);
+				spinner.succeed(`${testCaseFileName} screenshot added!`);
+			}
+		} catch (e) {
+			spinner.fail(`${testCaseFileName} failed: ${e.message}`);
+		}
+	});
+
+	console.log(`\nFixture screenshots can be viewed at:\nfile:///${CONSTS.FIXTURE_SCREENSHOTS_DIR}`);
+
+	if (!DEBUG) {
+		server.close();
+		browser.close();
+	}
+});
+
+function areScreenshotsIdentical(pathA: string, pathB: string) {
+	return new Promise(resolve => {
+		const imageA = fs.createReadStream(pathA).pipe(new PNG()).on('parsed', doneReading);
+		const imageB = fs.createReadStream(pathB).pipe(new PNG()).on('parsed', doneReading);
+
+		let filesRead = 0;
+		function doneReading() {
+			// Wait until both files are read.
+			if (++filesRead < 2) {
+				return;
+			}
+
+			if (imageA.width !== imageB.width || imageA.height !== imageB.height) {
+				return resolve(false);
+			}
+
+			// Do the visual diff.
+			const diff = new PNG({width: imageA.width, height: imageB.height});
+			const numDiffPixels = pixelmatch(
+				imageA.data, imageB.data, diff.data, imageA.width, imageA.height,
+				{threshold: 0.1}
+			);
+
+			return resolve(numDiffPixels === 0);
+		}
+	});
+}

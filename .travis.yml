@@ -1,0 +1,13 @@
+sudo: required
+language: node_js
+node_js: '8'
+cache:
+  apt: true
+  directories:
+  - node_modules
+  - "$HOME/.npm"
+before_install:
+  - npm install -g bower
+  - bower install
+script:
+  - npm test
