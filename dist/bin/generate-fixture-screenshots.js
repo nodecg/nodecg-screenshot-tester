@@ -24,7 +24,7 @@ server.open().then(async () => {
         const testCaseFileName = screenshot_taker_1.computeFullTestCaseName(testCase);
         const spinner = ora().start();
         const page = await browser.newPage();
-        page.setViewport({ width: screenshot_consts_1.CONSTS.WIDTH, height: screenshot_consts_1.CONSTS.HEIGHT });
+        await page.setViewport(screenshot_taker_1.computeTestCaseResolution(testCase));
         try {
             await screenshot_taker_1.screenshotGraphic(page, testCase, {
                 spinner,

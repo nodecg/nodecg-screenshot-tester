@@ -11,7 +11,7 @@ import * as ava from 'ava';
 
 // Ours
 import * as server from './screenshot-server';
-import {screenshotGraphic, computeFullTestCaseName} from './screenshot-taker';
+import {screenshotGraphic, computeFullTestCaseName, computeTestCaseResolution} from './screenshot-taker';
 import {CONSTS, TestCase} from './screenshot-consts';
 import {makeTempDir} from './make-temp-dir';
 
@@ -36,7 +36,7 @@ export const comparisonTests = (test: ava.TestInterface) => {
 		const testName = computeFullTestCaseName(testCase);
 		test.serial(testName as any, async t => {
 			const page = await _browser.newPage();
-			page.setViewport({width: CONSTS.WIDTH, height: CONSTS.HEIGHT});
+			await page.setViewport(computeTestCaseResolution(testCase));
 
 			await screenshotGraphic(page, testCase, {
 				captureLogs: true,

@@ -190,6 +190,26 @@ export function computeFullTestCaseName({route, nameAppendix}: {route: string; n
 	return testName || '';
 }
 
+export function computeTestCaseResolution(testCase: TestCase) {
+	let width = CONSTS.DEFAULT_WIDTH;
+	let height = CONSTS.DEFAULT_HEIGHT;
+
+	const graphicManifest = CONSTS.BUNDLE_MANIFEST.nodecg.graphics.find((graphic: any) => {
+		if (!graphic || typeof graphic !== 'object') {
+			return;
+		}
+
+		return testCase.route.endsWith(graphic.file);
+	});
+
+	if (graphicManifest) {
+		width = graphicManifest.width;
+		height = graphicManifest.height;
+	}
+
+	return {width, height};
+}
+
 function sleep(milliseconds: number) {
 	return new Promise(resolve => {
 		setTimeout(() => {

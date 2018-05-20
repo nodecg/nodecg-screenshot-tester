@@ -12,13 +12,14 @@ catch (_a) {
 }
 /* tslint:disable:no-var-requires */
 const constsFromBundle = require(path.join(BUNDLE_ROOT, 'test/helpers/screenshot-consts'));
-const bundlePackageJson = require(path.join(BUNDLE_ROOT, 'package.json'));
+const bundleManifest = require(path.join(BUNDLE_ROOT, 'package.json'));
 const baseConsts = {
-    WIDTH: 1920,
-    HEIGHT: 1080,
+    DEFAULT_WIDTH: 1920,
+    DEFAULT_HEIGHT: 1080,
     PORT: 4000,
-    BUNDLE_NAME: bundlePackageJson.name,
+    BUNDLE_NAME: bundleManifest.name,
     BUNDLE_ROOT,
+    BUNDLE_MANIFEST: bundleManifest,
     BUNDLE_CONFIG: {},
     FIXTURE_SCREENSHOTS_DIR: path.join(BUNDLE_ROOT, 'test/fixtures/screenshots'),
     PUPPETEER_LAUNCH_OPTS: {

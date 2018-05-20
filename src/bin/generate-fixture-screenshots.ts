@@ -19,7 +19,7 @@ const DEBUG = argv.debug;
 // Ours
 import * as server from '../screenshot-server';
 import {CONSTS, TestCase} from '../screenshot-consts';
-import {screenshotGraphic, computeFullTestCaseName} from '../screenshot-taker';
+import {screenshotGraphic, computeFullTestCaseName, computeTestCaseResolution} from '../screenshot-taker';
 
 const tmpDir = tmp.dirSync({unsafeCleanup: true}).name;
 
@@ -33,7 +33,7 @@ server.open().then(async () => {
 		const testCaseFileName = computeFullTestCaseName(testCase);
 		const spinner = ora().start();
 		const page = await browser.newPage();
-		page.setViewport({width: CONSTS.WIDTH, height: CONSTS.HEIGHT});
+		await page.setViewport(computeTestCaseResolution(testCase));
 
 		try {
 			await screenshotGraphic(page, testCase, {

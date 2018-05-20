@@ -12,11 +12,12 @@ export interface TestCase {
     before?: Function;
 }
 export interface ConstsInterface {
-    WIDTH: number;
-    HEIGHT: number;
+    DEFAULT_WIDTH: number;
+    DEFAULT_HEIGHT: number;
     PORT: number;
     BUNDLE_NAME: string;
     BUNDLE_ROOT: string;
+    BUNDLE_MANIFEST: any;
     BUNDLE_CONFIG: {
         [keys: string]: any;
     };

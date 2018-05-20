@@ -146,6 +146,22 @@ function computeFullTestCaseName({ route, nameAppendix }) {
     return testName || '';
 }
 exports.computeFullTestCaseName = computeFullTestCaseName;
+function computeTestCaseResolution(testCase) {
+    let width = screenshot_consts_1.CONSTS.DEFAULT_WIDTH;
+    let height = screenshot_consts_1.CONSTS.DEFAULT_HEIGHT;
+    const graphicManifest = screenshot_consts_1.CONSTS.BUNDLE_MANIFEST.nodecg.graphics.find((graphic) => {
+        if (!graphic || typeof graphic !== 'object') {
+            return;
+        }
+        return testCase.route.endsWith(graphic.file);
+    });
+    if (graphicManifest) {
+        width = graphicManifest.width;
+        height = graphicManifest.height;
+    }
+    return { width, height };
+}
+exports.computeTestCaseResolution = computeTestCaseResolution;
 function sleep(milliseconds) {
     return new Promise(resolve => {
         setTimeout(() => {

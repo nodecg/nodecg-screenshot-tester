@@ -29,7 +29,7 @@ exports.comparisonTests = (test) => {
         const testName = screenshot_taker_1.computeFullTestCaseName(testCase);
         test.serial(testName, async (t) => {
             const page = await _browser.newPage();
-            page.setViewport({ width: screenshot_consts_1.CONSTS.WIDTH, height: screenshot_consts_1.CONSTS.HEIGHT });
+            await page.setViewport(screenshot_taker_1.computeTestCaseResolution(testCase));
             await screenshot_taker_1.screenshotGraphic(page, testCase, {
                 captureLogs: true,
                 destinationDir: tempDir

@@ -11,3 +11,7 @@ export declare function computeFullTestCaseName({route, nameAppendix}: {
     route: string;
     nameAppendix?: string;
 }): string;
+export declare function computeTestCaseResolution(testCase: TestCase): {
+    width: number;
+    height: number;
+};
