@@ -30,6 +30,9 @@ exports.comparisonTests = (test) => {
         test.serial(testName, async (t) => {
             const page = await _browser.newPage();
             await page.setViewport(screenshot_taker_1.computeTestCaseResolution(testCase));
+            await page.evaluateOnNewDocument(() => {
+                window.__SCREENSHOT_TESTING__ = true;
+            });
             await screenshot_taker_1.screenshotGraphic(page, testCase, {
                 captureLogs: true,
                 destinationDir: tempDir

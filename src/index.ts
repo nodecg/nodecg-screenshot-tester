@@ -37,6 +37,9 @@ export const comparisonTests = (test: ava.TestInterface) => {
 		test.serial(testName as any, async t => {
 			const page = await _browser.newPage();
 			await page.setViewport(computeTestCaseResolution(testCase));
+			await page.evaluateOnNewDocument(() => {
+				(window as any).__SCREENSHOT_TESTING__ = true;
+			});
 
 			await screenshotGraphic(page, testCase, {
 				captureLogs: true,

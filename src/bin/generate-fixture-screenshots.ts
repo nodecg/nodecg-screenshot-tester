@@ -34,6 +34,9 @@ server.open().then(async () => {
 		const spinner = ora().start();
 		const page = await browser.newPage();
 		await page.setViewport(computeTestCaseResolution(testCase));
+		await page.evaluateOnNewDocument(() => {
+			(window as any).__SCREENSHOT_TESTING__ = true;
+		});
 
 		try {
 			await screenshotGraphic(page, testCase, {

@@ -23,12 +23,6 @@ async function screenshotGraphic(page, { route, nameAppendix = '', selector = DE
     }
     await page.goto(url);
     if (spinner) {
-        spinner.text = 'Setting testing flags...';
-    }
-    await page.evaluate(() => {
-        window.__SCREENSHOT_TESTING__ = true;
-    });
-    if (spinner) {
         spinner.text = `Waiting until ${selector} is on the page...`;
     }
     await page.waitForSelector(selector);

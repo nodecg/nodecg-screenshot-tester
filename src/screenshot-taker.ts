@@ -52,13 +52,6 @@ export async function screenshotGraphic(page: Puppeteer.Page, {
 	await page.goto(url);
 
 	if (spinner) {
-		spinner.text = 'Setting testing flags...';
-	}
-	await page.evaluate(() => {
-		(window as any).__SCREENSHOT_TESTING__ = true;
-	});
-
-	if (spinner) {
 		spinner.text = `Waiting until ${selector} is on the page...`;
 	}
 	await page.waitForSelector(selector);
