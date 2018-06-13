@@ -49,45 +49,6 @@ app.get(`/bundles/${CONSTS.BUNDLE_NAME}/graphics*`, (req, res, next) => {
 	return next();
 });
 
-app.get(`/${CONSTS.BUNDLE_NAME}/cache/:digest`, (req, res, next) => {
-	let fileName = req.params.digest;
-
-	const variant = req.query.variant;
-	if (variant) {
-		fileName += `_${variant}`;
-	}
-
-	const fileLocation = path.join(CONSTS.BUNDLE_ROOT, 'test/fixtures/images', `${fileName}.png`);
-	res.sendFile(fileLocation, (err: NodeJS.ErrnoException | null) => {
-		if (!err) {
-			return;
-		}
-
-		if (err.code === 'ENOENT') {
-			return res.sendStatus(404);
-		}
-
-		return next();
-	});
-});
-
-app.get(`/${CONSTS.BUNDLE_NAME}/checkCache`, async (req, res) => {
-	if (!req.query.hashes || typeof req.query.hashes !== 'string') {
-		return res.sendStatus(400);
-	}
-
-	const hashes = req.query.hashes.split(',');
-	const variants = req.query.variants ? req.query.variants.split(',') : [];
-
-	const results = hashes.map((hash: string, index: number) => {
-		return fs.existsSync(
-			path.join(CONSTS.BUNDLE_ROOT, 'test/fixtures/images', `${hash}_${variants[index]}.png`)
-		);
-	});
-
-	return res.send(results);
-});
-
 app.use(`/bundles/${CONSTS.BUNDLE_NAME}`, express.static(CONSTS.BUNDLE_ROOT));
 
 app.use('/mock-nodecg.js', async (_req, res) => {
