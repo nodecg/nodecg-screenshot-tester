@@ -38,6 +38,7 @@ app.get(`/bundles/${screenshot_consts_1.CONSTS.BUNDLE_NAME}/graphics*`, (req, re
     return next();
 });
 app.use(`/bundles/${screenshot_consts_1.CONSTS.BUNDLE_NAME}`, express.static(screenshot_consts_1.CONSTS.BUNDLE_ROOT));
+app.use(`/bundles/${screenshot_consts_1.CONSTS.BUNDLE_NAME}/test/fixtures/static`, express.static(path.resolve(screenshot_consts_1.CONSTS.BUNDLE_ROOT, 'test/fixtures/static')));
 app.use('/mock-nodecg.js', async (_req, res) => {
     const mockNodecgDir = path.parse(require.resolve('mock-nodecg')).dir;
     return res.sendFile(path.join(mockNodecgDir, 'dist/mock-nodecg.js'));

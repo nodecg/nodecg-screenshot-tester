@@ -50,6 +50,10 @@ app.get(`/bundles/${CONSTS.BUNDLE_NAME}/graphics*`, (req, res, next) => {
 });
 
 app.use(`/bundles/${CONSTS.BUNDLE_NAME}`, express.static(CONSTS.BUNDLE_ROOT));
+app.use(
+	`/bundles/${CONSTS.BUNDLE_NAME}/test/fixtures/static`,
+	express.static(path.resolve(CONSTS.BUNDLE_ROOT, 'test/fixtures/static'))
+);
 
 app.use('/mock-nodecg.js', async (_req, res) => {
 	const mockNodecgDir = path.parse(require.resolve('mock-nodecg')).dir;
