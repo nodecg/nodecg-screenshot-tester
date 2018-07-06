@@ -118,18 +118,18 @@ export async function screenshotGraphic(page: Puppeteer.Page, {
 
 				let entranceResult = (entranceMethod as any).apply(el, browserEntranceArgs);
 
-				// Handle entrance methods which return Promises or GSAP TimelineLite instances.
 				if (entranceResult.then && typeof entranceResult.then === 'function') {
+					// Handle entrance methods which return a Promise.
 					entranceResult = await entranceResult;
-				}
-
-				if (entranceResult instanceof (window as any).TimelineLite || entranceResult instanceof (window as any).TimelineMax) {
+				} else if (entranceResult instanceof (window as any).TimelineLite || entranceResult instanceof (window as any).TimelineMax) {
+					//  Handle entrance methods which return GSAP timeline.
 					setTimeout(() => {
 						entranceResult.call(() => {
 							resolve();
 						});
 					}, 250);
 				} else if (entranceResult instanceof (window as any).TweenLite || entranceResult instanceof (window as any).TweenMax) {
+					//  Handle entrance methods which return a GSAP tween.
 					const tl = new (window as any).TimelineLite();
 					tl.add(entranceResult);
 					tl.call(() => {

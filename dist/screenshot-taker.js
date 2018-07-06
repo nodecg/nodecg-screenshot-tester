@@ -80,11 +80,12 @@ async function screenshotGraphic(page, { route, nameAppendix = '', selector = DE
                     throw new Error(`Entrance method ${browserEntranceMethodName} not found on element.`);
                 }
                 let entranceResult = entranceMethod.apply(el, browserEntranceArgs);
-                // Handle entrance methods which return Promises or GSAP TimelineLite instances.
                 if (entranceResult.then && typeof entranceResult.then === 'function') {
+                    // Handle entrance methods which return a Promise.
                     entranceResult = await entranceResult;
                 }
-                if (entranceResult instanceof window.TimelineLite || entranceResult instanceof window.TimelineMax) {
+                else if (entranceResult instanceof window.TimelineLite || entranceResult instanceof window.TimelineMax) {
+                    //  Handle entrance methods which return GSAP timeline.
                     setTimeout(() => {
                         entranceResult.call(() => {
                             resolve();
@@ -92,6 +93,7 @@ async function screenshotGraphic(page, { route, nameAppendix = '', selector = DE
                     }, 250);
                 }
                 else if (entranceResult instanceof window.TweenLite || entranceResult instanceof window.TweenMax) {
+                    //  Handle entrance methods which return a GSAP tween.
                     const tl = new window.TimelineLite();
                     tl.add(entranceResult);
                     tl.call(() => {

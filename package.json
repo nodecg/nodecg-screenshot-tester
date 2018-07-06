@@ -1,7 +1,7 @@
 {
   "name": "nodecg-screenshot-tester",
   "version": "1.0.0",
-  "description": "Easily create visual regression tests for your NodeCG graphics.",
+  "description": "Automated visual regression testing of NodeCG graphics.",
   "main": "dist/index.js",
   "scripts": {
     "test": "npm run static",
