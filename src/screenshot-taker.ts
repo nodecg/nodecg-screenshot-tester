@@ -21,7 +21,7 @@ export async function screenshotGraphic(page: Puppeteer.Page, {
 	route,
 	nameAppendix = '',
 	selector = DEFAULT_SELECTOR,
-	entranceMethodName = 'enter',
+	entranceMethodName = '',
 	entranceMethodArgs = [],
 	additionalDelay = 0,
 	before,

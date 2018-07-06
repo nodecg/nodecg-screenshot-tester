@@ -6,7 +6,7 @@ const path = require("path");
 // Ours
 const screenshot_consts_1 = require("./screenshot-consts");
 const DEFAULT_SELECTOR = 'body';
-async function screenshotGraphic(page, { route, nameAppendix = '', selector = DEFAULT_SELECTOR, entranceMethodName = 'enter', entranceMethodArgs = [], additionalDelay = 0, before, replicantPrefills }, { spinner, destinationDir, captureLogs = false, debug = false }) {
+async function screenshotGraphic(page, { route, nameAppendix = '', selector = DEFAULT_SELECTOR, entranceMethodName = '', entranceMethodArgs = [], additionalDelay = 0, before, replicantPrefills }, { spinner, destinationDir, captureLogs = false, debug = false }) {
     const url = `http://127.0.0.1:${screenshot_consts_1.CONSTS.PORT}/${route}`; // tslint:disable-line:no-http-string
     const screenshotFilename = `${computeFullTestCaseName({ route, nameAppendix })}.png`;
     const screenshotPath = path.join(destinationDir, screenshotFilename);
