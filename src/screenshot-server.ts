@@ -62,6 +62,12 @@ app.use('/mock-nodecg.js', async (_req, res) => {
 	);
 });
 
+if (Array.isArray(CONSTS.CUSTOM_ROUTES)) {
+	CONSTS.CUSTOM_ROUTES.forEach(({method, route, handler}) => {
+		app[method](route, handler);
+	});
+}
+
 let serverReference: Server;
 let opened = false;
 export const open = () => {

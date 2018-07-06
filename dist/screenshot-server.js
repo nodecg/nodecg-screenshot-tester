@@ -43,6 +43,11 @@ app.use('/mock-nodecg.js', async (_req, res) => {
     const mockNodecgDir = path.parse(require.resolve('mock-nodecg')).dir;
     return res.sendFile(path.join(mockNodecgDir, 'dist/mock-nodecg.js'));
 });
+if (Array.isArray(screenshot_consts_1.CONSTS.CUSTOM_ROUTES)) {
+    screenshot_consts_1.CONSTS.CUSTOM_ROUTES.forEach(({ method, route, handler }) => {
+        app[method](route, handler);
+    });
+}
 let serverReference;
 let opened = false;
 exports.open = () => {
