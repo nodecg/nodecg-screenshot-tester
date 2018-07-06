@@ -132,6 +132,7 @@ You can even put your Replicant values in a file on disk and have `nodecg-screen
 
 Example:
 ```js
+// nodecg/bundles/your-bundle/test/helpers/screenshot-costs.js
 module.exports = {
 	TEST_CASES: [{
 		route: 'bundles/your-bundle/graphics/example.html',
@@ -153,6 +154,7 @@ You can provide a `CUSTOM_ROUTES` key in your `screenshot-consts.js` export:
 
 Example:
 ```js
+// nodecg/bundles/your-bundle/test/helpers/screenshot-costs.js
 module.exports = {
 	CUSTOM_ROUTES: [{
 		method: 'get',
@@ -206,6 +208,7 @@ Your `before` method can return a Promise, which also means it can be an `async`
 
 Example:
 ```js
+// nodecg/bundles/your-bundle/test/helpers/screenshot-costs.js
 module.exports = {
 		TEST_CASES: [{
 			route: 'bundles/your-bundle/graphics/sync-before-example.html',
