@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="2.0.0"></a>
+# [2.0.0](https://github.com/nodecg/nodecg-screenshot-tester/compare/v1.0.0...v2.0.0) (2018-07-06)
+
+
+### Bug Fixes
+
+* don't provide a default entranceMethodName ([5ac21d7](https://github.com/nodecg/nodecg-screenshot-tester/commit/5ac21d7))
+
+
+### Features
+
+* add support for custom express routes via CUSTOM_ROUTES const ([05d11aa](https://github.com/nodecg/nodecg-screenshot-tester/commit/05d11aa))
+
+
+### BREAKING CHANGES
+
+* `entranceMethodName` no longer has a default value. Previously, it had a default of `enter`.
+
+
+
 <a name="1.0.0"></a>
 # [1.0.0](https://github.com/nodecg/nodecg-screenshot-tester/compare/v0.1.1...v1.0.0) (2018-06-13)
 
