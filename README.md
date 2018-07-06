@@ -1,4 +1,4 @@
-# nodecg-screenshot-tester [![Build Status](https://travis-ci.com/nodecg/nodecg-screenshot-tester.svg?branch=master)](https://travis-ci.com/nodecg/nodecg-screenshot-tester)
+# nodecg-screenshot-tester [![npm version](https://img.shields.io/npm/v/nodecg-screenshot-tester.svg)](https://npm.im/nodecg-screenshot-tester) [![license](https://img.shields.io/npm/l/nodecg-screenshot-tester.svg)](https://npm.im/nodecg-screenshot-tester) [![Build Status](https://travis-ci.com/nodecg/nodecg-screenshot-tester.svg?branch=master)](https://travis-ci.com/nodecg/nodecg-screenshot-tester)
 
 > Automated visual regression testing of NodeCG graphics.
 
