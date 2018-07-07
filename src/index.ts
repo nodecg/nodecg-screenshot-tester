@@ -14,6 +14,7 @@ import * as server from './screenshot-server';
 import {screenshotGraphic, computeFullTestCaseName, computeTestCaseResolution} from './screenshot-taker';
 import {CONSTS, TestCase} from './screenshot-consts';
 import {makeTempDir} from './make-temp-dir';
+import {argv} from 'yargs';
 
 export const comparisonTests = (test: ava.TestInterface) => {
 	const tempDir = makeTempDir(test);
@@ -32,8 +33,17 @@ export const comparisonTests = (test: ava.TestInterface) => {
 		}
 	});
 
+	const filterRegExp = new RegExp(argv.filter);
+	if (argv.filter) {
+		console.log('Filter:', filterRegExp);
+	}
+
 	CONSTS.TEST_CASES.forEach((testCase: TestCase) => {
 		const testName = computeFullTestCaseName(testCase);
+		if (!filterRegExp.test(testName)) {
+			return;
+		}
+
 		test.serial(testName as any, async t => {
 			const page = await _browser.newPage();
 			await page.setViewport(computeTestCaseResolution(testCase));

@@ -21,6 +21,7 @@ Yes, [`sgdq18-layouts`](https://github.com/GamesDoneQuick/sgdq18-layouts/tree/ma
 * [How do I populate Replicants for testing?](#populating-replicants)
 * [What if my graphic relies on HTTP routes not provided by `nodecg-screenshot-tester`?](#custom-routes)
 * [Can I run arbitrary code as part of my test?](#arbitrary-code)
+* [How do I run only a subset of my test cases?](#filter-cases)
 * [Are there other things I can do in my test cases?](#other)
 
 ## <a name="bundle-usage"></a> How do I use it in my bundle?
@@ -226,6 +227,16 @@ module.exports = {
 			}
 		}]
 	}
+```
+
+## <a name="filter-cases"></a> How do I run only a subset of my test cases?
+The `--filter` option is what you're looking for. The value you enter will be interpreted as a RegExp.
+
+##### Example:
+```bash
+npm run generate-fixture-screenshots -- --filter=example
+npm test -- -- --filter=example
+ava test -- --filter=example
 ```
 
 ## <a name="other"></a> Are there other things I can do in my test cases?

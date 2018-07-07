@@ -11,6 +11,7 @@ const server = require("./screenshot-server");
 const screenshot_taker_1 = require("./screenshot-taker");
 const screenshot_consts_1 = require("./screenshot-consts");
 const make_temp_dir_1 = require("./make-temp-dir");
+const yargs_1 = require("yargs");
 exports.comparisonTests = (test) => {
     const tempDir = make_temp_dir_1.makeTempDir(test);
     let _browser;
@@ -25,8 +26,15 @@ exports.comparisonTests = (test) => {
             _browser.close();
         }
     });
+    const filterRegExp = new RegExp(yargs_1.argv.filter);
+    if (yargs_1.argv.filter) {
+        console.log('Filter:', filterRegExp);
+    }
     screenshot_consts_1.CONSTS.TEST_CASES.forEach((testCase) => {
         const testName = screenshot_taker_1.computeFullTestCaseName(testCase);
+        if (!filterRegExp.test(testName)) {
+            return;
+        }
         test.serial(testName, async (t) => {
             const page = await _browser.newPage();
             await page.setViewport(screenshot_taker_1.computeTestCaseResolution(testCase));

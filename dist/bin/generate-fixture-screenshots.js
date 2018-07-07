@@ -20,7 +20,15 @@ const screenshot_taker_1 = require("../screenshot-taker");
 const tmpDir = tmp.dirSync({ unsafeCleanup: true }).name;
 server.open().then(async () => {
     const browser = await puppeteer.launch(Object.assign({}, screenshot_consts_1.CONSTS.PUPPETEER_LAUNCH_OPTS, { headless: !DEBUG }));
-    await pEachSeries(screenshot_consts_1.CONSTS.TEST_CASES, async (testCase) => {
+    const filterRegExp = new RegExp(yargs_1.argv.filter);
+    if (yargs_1.argv.filter) {
+        console.log('Filter:', filterRegExp);
+    }
+    const filteredTestCases = screenshot_consts_1.CONSTS.TEST_CASES.filter(testCase => {
+        const testCaseFileName = screenshot_taker_1.computeFullTestCaseName(testCase);
+        return filterRegExp.test(testCaseFileName);
+    });
+    await pEachSeries(filteredTestCases, async (testCase) => {
         const testCaseFileName = screenshot_taker_1.computeFullTestCaseName(testCase);
         const spinner = ora().start();
         const page = await browser.newPage();

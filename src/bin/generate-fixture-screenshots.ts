@@ -29,7 +29,17 @@ server.open().then(async () => {
 		headless: !DEBUG
 	});
 
-	await pEachSeries(CONSTS.TEST_CASES, async (testCase: TestCase) => {
+	const filterRegExp = new RegExp(argv.filter);
+	if (argv.filter) {
+		console.log('Filter:', filterRegExp);
+	}
+
+	const filteredTestCases = CONSTS.TEST_CASES.filter(testCase => {
+		const testCaseFileName = computeFullTestCaseName(testCase);
+		return filterRegExp.test(testCaseFileName);
+	});
+
+	await pEachSeries(filteredTestCases, async (testCase: TestCase) => {
 		const testCaseFileName = computeFullTestCaseName(testCase);
 		const spinner = ora().start();
 		const page = await browser.newPage();
