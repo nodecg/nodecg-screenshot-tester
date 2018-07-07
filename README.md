@@ -215,7 +215,6 @@ module.exports = {
 			before(page, element) {
 				console.log('Just some simple synchronous code.');
 				console.log('You can put anything in here that you need to!');
-				console.log('This code runs in the browser context, so you have full access to the DOM.');
 			}
 		}, {
 			route: 'bundles/your-bundle/graphics/async-before-example.html',
