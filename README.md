@@ -92,7 +92,7 @@ If your element's entrance method returns a Promise, `nodecg-screenshot-tester` 
 
 Likewise, if your element's entrance method returns a [GreenSock](https://greensock.com/gsap) tween or timeline, `nodecg-screenshot-tester` will wait for that animation to complete before taking the screenshot.
 
-Example: 
+##### Example: 
 ```js
 // nodecg/bundles/your-bundle/test/helpers/screenshot-costs.js
 module.exports = {
@@ -110,7 +110,7 @@ Yes! Just add an `additionalDelay` key to your test case.
 
 It might feel like this is a hack, but you'll probably find yourself needing to add at least a few hundred milliseconds of additional delay to _most_ of your tests. Graphics are hard.
 
-Example:
+##### Example:
 ```js
 // nodecg/bundles/your-bundle/test/helpers/screenshot-costs.js
 module.exports = {
@@ -130,7 +130,7 @@ Absolutely. If your test case specifies a `replicantPrefills` object, it will po
 
 You can even put your Replicant values in a file on disk and have `nodecg-screenshot-tester` load them for you.
 
-Example:
+##### Example:
 ```js
 // nodecg/bundles/your-bundle/test/helpers/screenshot-costs.js
 module.exports = {
@@ -152,7 +152,7 @@ module.exports = {
 ## <a name="custom-routes"></a> What if my graphic relies on HTTP routes not provided by `nodecg-screenshot-tester`?
 You can provide a `CUSTOM_ROUTES` key in your `screenshot-consts.js` export:
 
-Example:
+##### Example:
 ```js
 // nodecg/bundles/your-bundle/test/helpers/screenshot-costs.js
 module.exports = {
@@ -206,7 +206,7 @@ Yes! You can provide a `before` method in your test case, which will be run befo
 
 Your `before` method can return a Promise, which also means it can be an `async` method!
 
-Example:
+##### Example:
 ```js
 // nodecg/bundles/your-bundle/test/helpers/screenshot-costs.js
 module.exports = {
