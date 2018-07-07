@@ -83,6 +83,7 @@ async function screenshotGraphic(page, { route, nameAppendix = '', selector = DE
                 if (entranceResult.then && typeof entranceResult.then === 'function') {
                     // Handle entrance methods which return a Promise.
                     entranceResult = await entranceResult;
+                    resolve();
                 }
                 else if (entranceResult instanceof window.TimelineLite || entranceResult instanceof window.TimelineMax) {
                     //  Handle entrance methods which return GSAP timeline.

@@ -121,6 +121,7 @@ export async function screenshotGraphic(page: Puppeteer.Page, {
 				if (entranceResult.then && typeof entranceResult.then === 'function') {
 					// Handle entrance methods which return a Promise.
 					entranceResult = await entranceResult;
+					resolve();
 				} else if (entranceResult instanceof (window as any).TimelineLite || entranceResult instanceof (window as any).TimelineMax) {
 					//  Handle entrance methods which return GSAP timeline.
 					setTimeout(() => {
