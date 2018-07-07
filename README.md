@@ -126,7 +126,7 @@ module.exports = {
 ```
 
 ## <a name="populating-replicants"></a> How do I populate Replicants for testing?
-Absolutely. If your test case specifies a `replicantPrefills` object, it will populate those Replicants with the specified values before running your entrance method (if defined) and taking the screenshot.
+If your test case specifies a `replicantPrefills` object, it will populate those Replicants with the specified values before running your entrance method (if defined) and taking the screenshot.
 
 You can even put your Replicant values in a file on disk and have `nodecg-screenshot-tester` load them for you.
 
