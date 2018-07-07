@@ -52,5 +52,9 @@
   },
   "bin": {
     "generate-fixture-screenshots": "dist/bin/generate-fixture-screenshots.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nodecg/nodecg-screenshot-tester.git"
   }
 }
