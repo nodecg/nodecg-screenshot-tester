@@ -232,6 +232,8 @@ module.exports = {
 ## <a name="filter-cases"></a> How do I run only a subset of my test cases?
 The `--filter` option is what you're looking for. The value you enter will be interpreted as a RegExp.
 
+Filtering your actual ava tests requires `ava@^1.0.0` (currently in beta).
+
 ##### Example:
 ```bash
 npm run generate-fixture-screenshots -- --filter=example
