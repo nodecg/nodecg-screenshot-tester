@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="2.1.0"></a>
+# [2.1.0](https://github.com/nodecg/nodecg-screenshot-tester/compare/v2.0.0...v2.1.0) (2018-07-07)
+
+
+### Bug Fixes
+
+* fix screenshots failing when their entrance method returns a promise ([7d0fd2c](https://github.com/nodecg/nodecg-screenshot-tester/commit/7d0fd2c))
+
+
+### Features
+
+* **cli:** add support for --filter argument ([b054039](https://github.com/nodecg/nodecg-screenshot-tester/commit/b054039))
+
+
+
 <a name="2.0.0"></a>
 # [2.0.0](https://github.com/nodecg/nodecg-screenshot-tester/compare/v1.0.0...v2.0.0) (2018-07-06)
 
