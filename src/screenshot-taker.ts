@@ -178,9 +178,15 @@ export async function screenshotGraphic(page: Puppeteer.Page, {
 
 export function computeFullTestCaseName({route, nameAppendix}: {route: string; nameAppendix?: string}) {
 	let testName = route.split('/').pop();
+
+	if (testName) {
+		testName = testName.split('?')[0];
+	}
+
 	if (nameAppendix) {
 		testName += '-' + nameAppendix;
 	}
+
 	return testName || '';
 }
 
