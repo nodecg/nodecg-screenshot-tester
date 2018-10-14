@@ -18,7 +18,7 @@
     "cheerio": "^1.0.0-rc.2",
     "express": "^4.16.3",
     "mkdirp": "^0.5.1",
-    "mock-nodecg": "^1.5.2",
+    "mock-nodecg": "^1.7.0",
     "ora": "^2.1.0",
     "p-each-series": "^1.0.0",
     "pixelmatch": "^4.0.2",
