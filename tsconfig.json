@@ -28,6 +28,7 @@
 		"pretty": true,
 		"sourceMap": true,
 		"strictNullChecks": true,
+		"skipLibCheck": true,
 		"target": "es2017",
 		"traceResolution": false,
 		"types": [

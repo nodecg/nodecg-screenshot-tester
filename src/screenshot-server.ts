@@ -8,6 +8,7 @@ import {Server} from 'http';
 // Packages
 import * as cheerio from 'cheerio';
 import * as express from 'express';
+import transformMiddleware from 'express-transform-bare-module-specifiers';
 
 // Ours
 import {CONSTS} from './screenshot-consts';
@@ -49,7 +50,15 @@ app.get(`/bundles/${CONSTS.BUNDLE_NAME}/graphics*`, (req, res, next) => {
 	return next();
 });
 
+if (CONSTS.BUNDLE_MANIFEST.nodecg.transformBareModuleSpecifiers) {
+	app.use(`/bundles/${CONSTS.BUNDLE_NAME}/*`, transformMiddleware({
+		rootDir: process.env.NODECG_ROOT,
+		modulesUrl: `/bundles/${CONSTS.BUNDLE_NAME}/node_modules`
+	}));
+}
+
 app.use(`/bundles/${CONSTS.BUNDLE_NAME}`, express.static(CONSTS.BUNDLE_ROOT));
+
 app.use(
 	`/bundles/${CONSTS.BUNDLE_NAME}/test/fixtures/static`,
 	express.static(path.resolve(CONSTS.BUNDLE_ROOT, 'test/fixtures/static'))
