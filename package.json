@@ -17,7 +17,7 @@
   "dependencies": {
     "cheerio": "^1.0.0-rc.2",
     "express": "^4.16.4",
-    "express-transform-bare-module-specifiers": "^1.0.1",
+    "express-transform-bare-module-specifiers": "^1.0.2",
     "mkdirp": "^0.5.1",
     "mock-nodecg": "^1.7.0",
     "ora": "^2.1.0",
