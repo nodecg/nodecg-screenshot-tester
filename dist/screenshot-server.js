@@ -6,6 +6,7 @@ const path = require("path");
 // Packages
 const cheerio = require("cheerio");
 const express = require("express");
+const express_transform_bare_module_specifiers_1 = require("express-transform-bare-module-specifiers");
 // Ours
 const screenshot_consts_1 = require("./screenshot-consts");
 const app = express();
@@ -37,6 +38,12 @@ app.get(`/bundles/${screenshot_consts_1.CONSTS.BUNDLE_NAME}/graphics*`, (req, re
     }
     return next();
 });
+if (screenshot_consts_1.CONSTS.BUNDLE_MANIFEST.nodecg.transformBareModuleSpecifiers) {
+    app.use(`/bundles/${screenshot_consts_1.CONSTS.BUNDLE_NAME}/*`, express_transform_bare_module_specifiers_1.default({
+        rootDir: process.env.NODECG_ROOT,
+        modulesUrl: `/bundles/${screenshot_consts_1.CONSTS.BUNDLE_NAME}/node_modules`
+    }));
+}
 app.use(`/bundles/${screenshot_consts_1.CONSTS.BUNDLE_NAME}`, express.static(screenshot_consts_1.CONSTS.BUNDLE_ROOT));
 app.use(`/bundles/${screenshot_consts_1.CONSTS.BUNDLE_NAME}/test/fixtures/static`, express.static(path.resolve(screenshot_consts_1.CONSTS.BUNDLE_ROOT, 'test/fixtures/static')));
 app.use('/mock-nodecg.js', async (_req, res) => {
