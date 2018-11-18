@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="2.2.0"></a>
+# [2.2.0](https://github.com/nodecg/nodecg-screenshot-tester/compare/v2.1.2...v2.2.0) (2018-11-18)
+
+
+### Features
+
+* transform bare module specifiers ([#1](https://github.com/nodecg/nodecg-screenshot-tester/issues/1)) ([6b03314](https://github.com/nodecg/nodecg-screenshot-tester/commit/6b03314))
+
+
+
 <a name="2.1.2"></a>
 ## [2.1.2](https://github.com/nodecg/nodecg-screenshot-tester/compare/v2.1.1...v2.1.2) (2018-10-14)
 
