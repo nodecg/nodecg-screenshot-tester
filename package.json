@@ -57,5 +57,6 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/nodecg/nodecg-screenshot-tester.git"
-  }
+  },
+  "types": "dist/index.d.ts"
 }
