@@ -48,8 +48,8 @@ async function screenshotGraphic(page, { route, nameAppendix = '', selector = DE
             spinner.text = 'Prefilling replicants...';
         }
         const prefilledReplicants = {};
-        Object.entries(replicantPrefills).forEach(([key, value = key]) => {
-            if (typeof value === 'string') { // tslint:disable-line:early-exit
+        Object.entries(replicantPrefills).forEach(([key, value]) => {
+            if (value === undefined) { // tslint:disable-line:early-exit
                 const filePath = path.resolve(screenshot_consts_1.CONSTS.BUNDLE_ROOT, 'test/fixtures/replicants', `${encodeURIComponent(key)}.rep`);
                 const fileContents = fs.readFileSync(filePath, 'utf-8');
                 prefilledReplicants[key] = JSON.parse(fileContents);

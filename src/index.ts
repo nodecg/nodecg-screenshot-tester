@@ -44,7 +44,7 @@ export const comparisonTests = (test: ava.TestInterface) => {
 			return;
 		}
 
-		test.serial(testName as any, async t => {
+		test.serial(testName as any, async (t: ava.ExecutionContext) => {
 			const page = await _browser.newPage();
 			await page.setViewport(computeTestCaseResolution(testCase));
 			await page.evaluateOnNewDocument(() => {

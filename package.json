@@ -41,7 +41,7 @@
     "@types/puppeteer": "^1.3.2",
     "@types/tmp": "0.0.33",
     "@types/yargs": "^11.0.0",
-    "ava": "^1.0.0-beta.4",
+    "ava": "^1.2.0",
     "trash-cli": "^1.4.0",
     "ts-node": "^6.0.3",
     "tslint": "^5.10.0",
@@ -49,7 +49,7 @@
     "typescript": "^2.8.3"
   },
   "peerDependencies": {
-    "ava": "^1.0.0-beta.4"
+    "ava": "^1.2.0"
   },
   "bin": {
     "generate-fixture-screenshots": "dist/bin/generate-fixture-screenshots.js"

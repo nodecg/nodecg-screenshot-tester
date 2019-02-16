@@ -82,8 +82,8 @@ export async function screenshotGraphic(page: Puppeteer.Page, {
 		}
 
 		const prefilledReplicants: {[key: string]: any} = {};
-		Object.entries(replicantPrefills).forEach(([key, value = key]: [string, any]) => {
-			if (typeof value === 'string') { // tslint:disable-line:early-exit
+		Object.entries(replicantPrefills).forEach(([key, value]: [string, any]) => {
+			if (value === undefined) { // tslint:disable-line:early-exit
 				const filePath = path.resolve(CONSTS.BUNDLE_ROOT, 'test/fixtures/replicants', `${encodeURIComponent(key)}.rep`);
 				const fileContents = fs.readFileSync(filePath, 'utf-8');
 				prefilledReplicants[key] = JSON.parse(fileContents);
