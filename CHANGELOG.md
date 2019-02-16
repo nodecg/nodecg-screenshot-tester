@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="2.2.2"></a>
+## [2.2.2](https://github.com/nodecg/nodecg-screenshot-tester/compare/v2.2.1...v2.2.2) (2019-02-16)
+
+
+### Bug Fixes
+
+* **replicants:** fix string prefill values being unusable ([3f88e35](https://github.com/nodecg/nodecg-screenshot-tester/commit/3f88e35))
+
+
+
 <a name="2.2.1"></a>
 ## [2.2.1](https://github.com/nodecg/nodecg-screenshot-tester/compare/v2.2.0...v2.2.1) (2019-01-28)
 
