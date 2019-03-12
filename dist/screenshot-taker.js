@@ -37,12 +37,6 @@ async function screenshotGraphic(page, { route, nameAppendix = '', selector = DE
     await page.evaluate(() => {
         window.nodecg.playSound = () => { }; // tslint:disable-line:no-empty
     });
-    if (before) {
-        if (spinner) {
-            spinner.text = 'Running "before" method...';
-        }
-        await before(page, element);
-    }
     if (replicantPrefills && Object.keys(replicantPrefills).length > 0) {
         if (spinner) {
             spinner.text = 'Prefilling replicants...';
@@ -67,6 +61,12 @@ async function screenshotGraphic(page, { route, nameAppendix = '', selector = DE
                 replicant.emit('change', value);
             });
         }, prefilledReplicants);
+    }
+    if (before) {
+        if (spinner) {
+            spinner.text = 'Running "before" method...';
+        }
+        await before(page, element);
     }
     if (entranceMethodName && selector !== DEFAULT_SELECTOR) {
         if (spinner) {

@@ -69,13 +69,6 @@ export async function screenshotGraphic(page: Puppeteer.Page, {
 		(window as any).nodecg.playSound = () => {}; // tslint:disable-line:no-empty
 	});
 
-	if (before) {
-		if (spinner) {
-			spinner.text = 'Running "before" method...';
-		}
-		await before(page, element);
-	}
-
 	if (replicantPrefills && Object.keys(replicantPrefills).length > 0) {
 		if (spinner) {
 			spinner.text = 'Prefilling replicants...';
@@ -101,6 +94,13 @@ export async function screenshotGraphic(page: Puppeteer.Page, {
 				replicant.emit('change', value);
 			});
 		}, prefilledReplicants);
+	}
+
+	if (before) {
+		if (spinner) {
+			spinner.text = 'Running "before" method...';
+		}
+		await before(page, element);
 	}
 
 	if (entranceMethodName && selector !== DEFAULT_SELECTOR) {
