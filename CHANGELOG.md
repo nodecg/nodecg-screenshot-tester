@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.0.0"></a>
+# [3.0.0](https://github.com/nodecg/nodecg-screenshot-tester/compare/v2.2.2...v3.0.0) (2019-03-12)
+
+
+### Features
+
+* call `before` after populating replicants ([1887e14](https://github.com/nodecg/nodecg-screenshot-tester/commit/1887e14))
+
+
+### BREAKING CHANGES
+
+* `before` is now called after replicant prefills have been populated.
+
+
+
 <a name="2.2.2"></a>
 ## [2.2.2](https://github.com/nodecg/nodecg-screenshot-tester/compare/v2.2.1...v2.2.2) (2019-02-16)
 
