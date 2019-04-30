@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="4.0.0"></a>
+# [4.0.0](https://github.com/nodecg/nodecg-screenshot-tester/compare/v3.0.0...v4.0.0) (2019-04-30)
+
+
+### Bug Fixes
+
+* **package:** update puppeteer ([5a973d8](https://github.com/nodecg/nodecg-screenshot-tester/commit/5a973d8))
+
+
+### BREAKING CHANGES
+
+* **package:** Puppeteer has been updated, which means a new Chromium version is being used. This will likely change how certain pages render, and will change some screenshots as a result. You may need to generate new fixtures.
+
+
+
 <a name="3.0.0"></a>
 # [3.0.0](https://github.com/nodecg/nodecg-screenshot-tester/compare/v2.2.2...v3.0.0) (2019-03-12)
 
