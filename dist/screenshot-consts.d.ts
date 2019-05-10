@@ -11,6 +11,9 @@ export interface TestCase {
         [key: string]: any;
     };
     before?: Function;
+    metadata?: {
+        [key: string]: any;
+    };
 }
 export interface CustomRoute {
     method: 'all' | 'get' | 'post' | 'put' | 'delete' | 'patch' | 'options' | 'head';

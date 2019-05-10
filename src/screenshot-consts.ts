@@ -27,6 +27,7 @@ export interface TestCase {
 	entranceMethodArgs?: any[];
 	replicantPrefills?: {[key: string]: any};
 	before?: Function;
+	metadata?: {[key: string]: any};
 }
 
 export interface CustomRoute {
