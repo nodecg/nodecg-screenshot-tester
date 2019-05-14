@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="5.0.0"></a>
+# [5.0.0](https://github.com/nodecg/nodecg-screenshot-tester/compare/v4.1.0...v5.0.0) (2019-05-14)
+
+
+### Features
+
+* wait until all network connections have completed before taking screenshots ([8735dde](https://github.com/nodecg/nodecg-screenshot-tester/commit/8735dde))
+
+
+### BREAKING CHANGES
+
+* nodecg-screenshot-tester now waits for 500ms of network idle time before taking a screenshot. This is done to try to ensure that all fonts, image, etc, have loaded on the page before the screenshot is taken.
+
+
+
 <a name="4.1.0"></a>
 # [4.1.0](https://github.com/nodecg/nodecg-screenshot-tester/compare/v4.0.0...v4.1.0) (2019-05-10)
 
