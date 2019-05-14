@@ -49,7 +49,7 @@ export async function screenshotGraphic(page: Puppeteer.Page, {
 	if (spinner) {
 		spinner.text = `Navigating to ${url}...`;
 	}
-	await page.goto(url);
+	await page.goto(url, {waitUntil: 'networkidle0'});
 
 	if (spinner) {
 		spinner.text = `Waiting until ${selector} is on the page...`;
