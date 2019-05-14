@@ -51,12 +51,10 @@ exports.comparisonTests = (test) => {
     });
     function compareScreenshots(t, fileName) {
         return new Promise(resolve => {
-            const resultImage = fs
-                .createReadStream(`${tempDir}/${fileName}.png`)
-                .pipe(new pngjs_1.PNG()).on('parsed', doneReading);
-            const fixtureImage = fs
-                .createReadStream(`${screenshot_consts_1.CONSTS.FIXTURE_SCREENSHOTS_DIR}/${fileName}.png`)
-                .pipe(new pngjs_1.PNG()).on('parsed', doneReading);
+            const rawResultImage = fs.readFileSync(`${tempDir}/${fileName}.png`);
+            const rawFixtureImage = fs.readFileSync(`${screenshot_consts_1.CONSTS.FIXTURE_SCREENSHOTS_DIR}/${fileName}.png`);
+            const resultImage = new pngjs_1.PNG().parse(rawResultImage, doneReading);
+            const fixtureImage = new pngjs_1.PNG().parse(rawFixtureImage, doneReading);
             let filesRead = 0;
             function doneReading() {
                 // Wait until both files are read.

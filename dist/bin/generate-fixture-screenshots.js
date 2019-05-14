@@ -73,8 +73,10 @@ server.open().then(async () => {
 });
 function areScreenshotsIdentical(pathA, pathB) {
     return new Promise(resolve => {
-        const imageA = fs.createReadStream(pathA).pipe(new pngjs_1.PNG()).on('parsed', doneReading);
-        const imageB = fs.createReadStream(pathB).pipe(new pngjs_1.PNG()).on('parsed', doneReading);
+        const rawImageA = fs.readFileSync(pathA);
+        const rawImageB = fs.readFileSync(pathB);
+        const imageA = new pngjs_1.PNG().parse(rawImageA, doneReading);
+        const imageB = new pngjs_1.PNG().parse(rawImageB, doneReading);
         let filesRead = 0;
         function doneReading() {
             // Wait until both files are read.

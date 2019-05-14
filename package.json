@@ -23,7 +23,7 @@
     "ora": "^2.1.0",
     "p-each-series": "^1.0.0",
     "pixelmatch": "^4.0.2",
-    "pngjs": "^3.3.3",
+    "pngjs": "^3.4.0",
     "puppeteer": "^1.15.0",
     "tmp": "0.0.33",
     "tslib": "^1.9.1",

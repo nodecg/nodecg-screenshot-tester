@@ -63,13 +63,10 @@ export const comparisonTests = (test: ava.TestInterface) => {
 
 	function compareScreenshots(t: ava.ExecutionContext, fileName: string) {
 		return new Promise(resolve => {
-			const resultImage = fs
-				.createReadStream(`${tempDir}/${fileName}.png`)
-				.pipe(new PNG()).on('parsed', doneReading);
-
-			const fixtureImage = fs
-				.createReadStream(`${CONSTS.FIXTURE_SCREENSHOTS_DIR}/${fileName}.png`)
-				.pipe(new PNG()).on('parsed', doneReading);
+			const rawResultImage = fs.readFileSync(`${tempDir}/${fileName}.png`);
+			const rawFixtureImage = fs.readFileSync(`${CONSTS.FIXTURE_SCREENSHOTS_DIR}/${fileName}.png`);
+			const resultImage = new PNG().parse(rawResultImage, doneReading);
+			const fixtureImage = new PNG().parse(rawFixtureImage, doneReading);
 
 			let filesRead = 0;
 			function doneReading() {

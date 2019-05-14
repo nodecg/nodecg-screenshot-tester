@@ -91,8 +91,10 @@ server.open().then(async () => {
 
 function areScreenshotsIdentical(pathA: string, pathB: string) {
 	return new Promise(resolve => {
-		const imageA = fs.createReadStream(pathA).pipe(new PNG()).on('parsed', doneReading);
-		const imageB = fs.createReadStream(pathB).pipe(new PNG()).on('parsed', doneReading);
+		const rawImageA = fs.readFileSync(pathA);
+		const rawImageB = fs.readFileSync(pathB);
+		const imageA = new PNG().parse(rawImageA, doneReading);
+		const imageB = new PNG().parse(rawImageB, doneReading);
 
 		let filesRead = 0;
 		function doneReading() {
