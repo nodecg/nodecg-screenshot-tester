@@ -1,4 +1,4 @@
 /// <reference types="node" />
 import { Server } from 'http';
-export declare const open: () => Promise<{}>;
-export declare const close: () => Server;
+export declare const open: () => Promise<Server>;
+export declare const close: () => void | Server;

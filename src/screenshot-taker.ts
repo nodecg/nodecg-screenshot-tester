@@ -1,11 +1,9 @@
-'use strict';
-
 // Native
 import * as fs from 'fs';
 import * as path from 'path';
 
 // Ours
-import {CONSTS, TestCase} from './screenshot-consts';
+import { CONSTS, TestCase } from './screenshot-consts';
 import * as Puppeteer from 'puppeteer';
 
 const DEFAULT_SELECTOR = 'body';
@@ -17,23 +15,22 @@ export interface ScreenshotOptions {
 	debug?: boolean;
 }
 
-export async function screenshotGraphic(page: Puppeteer.Page, {
-	route,
-	nameAppendix = '',
-	selector = DEFAULT_SELECTOR,
-	entranceMethodName = '',
-	entranceMethodArgs = [],
-	additionalDelay = 0,
-	before,
-	replicantPrefills
-}: TestCase, {
-	spinner,
-	destinationDir,
-	captureLogs = false,
-	debug = false
-}: ScreenshotOptions) {
-	const url = `http://127.0.0.1:${CONSTS.PORT}/${route}`; // tslint:disable-line:no-http-string
-	const screenshotFilename = `${computeFullTestCaseName({route, nameAppendix})}.png`;
+export async function screenshotGraphic(
+	page: Puppeteer.Page,
+	{
+		route,
+		nameAppendix = '',
+		selector = DEFAULT_SELECTOR,
+		entranceMethodName = '',
+		entranceMethodArgs = [],
+		additionalDelay = 0,
+		before,
+		replicantPrefills,
+	}: TestCase,
+	{ spinner, destinationDir, captureLogs = false, debug = false }: ScreenshotOptions,
+): Promise<void> {
+	const url = `http://127.0.0.1:${CONSTS.PORT}/${route}`;
+	const screenshotFilename = `${computeFullTestCaseName({ route, nameAppendix })}.png`;
 	const screenshotPath = path.join(destinationDir, screenshotFilename);
 
 	let delay = additionalDelay;
@@ -49,15 +46,17 @@ export async function screenshotGraphic(page: Puppeteer.Page, {
 	if (spinner) {
 		spinner.text = `Navigating to ${url}...`;
 	}
+
 	page.goto(url);
 	await Promise.all([
-		page.waitForNavigation({waitUntil: 'load'}),
-		page.waitForNavigation({waitUntil: 'networkidle0'})
+		page.waitForNavigation({ waitUntil: 'load' }),
+		page.waitForNavigation({ waitUntil: 'networkidle0' }),
 	]);
 
 	if (spinner) {
 		spinner.text = `Waiting until ${selector} is on the page...`;
 	}
+
 	await page.waitForSelector(selector);
 	const element = await page.$(selector);
 
@@ -69,8 +68,10 @@ export async function screenshotGraphic(page: Puppeteer.Page, {
 	if (spinner) {
 		spinner.text = 'Stubbing APIs...';
 	}
+
 	await page.evaluate(() => {
-		(window as any).nodecg.playSound = () => {}; // tslint:disable-line:no-empty
+		// eslint-disable-next-line @typescript-eslint/no-empty-function
+		(window as any).nodecg.playSound = () => {};
 	});
 
 	if (replicantPrefills && Object.keys(replicantPrefills).length > 0) {
@@ -78,10 +79,14 @@ export async function screenshotGraphic(page: Puppeteer.Page, {
 			spinner.text = 'Prefilling replicants...';
 		}
 
-		const prefilledReplicants: {[key: string]: any} = {};
+		const prefilledReplicants: { [key: string]: any } = {};
 		Object.entries(replicantPrefills).forEach(([key, value]: [string, any]) => {
-			if (value === undefined) { // tslint:disable-line:early-exit
-				const filePath = path.resolve(CONSTS.BUNDLE_ROOT, 'test/fixtures/replicants', `${encodeURIComponent(key)}.rep`);
+			if (value === undefined) {
+				const filePath = path.resolve(
+					CONSTS.BUNDLE_ROOT,
+					'test/fixtures/replicants',
+					`${encodeURIComponent(key)}.rep`,
+				);
 				const fileContents = fs.readFileSync(filePath, 'utf-8');
 				prefilledReplicants[key] = JSON.parse(fileContents);
 			} else {
@@ -91,6 +96,7 @@ export async function screenshotGraphic(page: Puppeteer.Page, {
 
 		await page.evaluate(browserPrefilledReplicants => {
 			Object.entries(browserPrefilledReplicants).forEach(([key, value]: [string, any]) => {
+				// eslint-disable-next-line new-cap
 				const replicant = (window as any).nodecg.Replicant(key);
 				replicant.status = 'declared';
 				replicant.value = value;
@@ -104,6 +110,7 @@ export async function screenshotGraphic(page: Puppeteer.Page, {
 		if (spinner) {
 			spinner.text = 'Running "before" method...';
 		}
+
 		await before(page, element);
 	}
 
@@ -113,44 +120,56 @@ export async function screenshotGraphic(page: Puppeteer.Page, {
 		}
 
 		await element.click(); // Necessary to get media to play in some circumstances.
-		await page.$eval(selector, (el, browserEntranceMethodName, browserEntranceArgs) => {
-			return new Promise(async resolve => {
-				const entranceMethod = el[(browserEntranceMethodName as keyof Element)];
-				if (typeof entranceMethod !== 'function') {
-					throw new Error(`Entrance method ${browserEntranceMethodName} not found on element.`);
-				}
+		await page.$eval(
+			selector,
+			async (el, browserEntranceMethodName, browserEntranceArgs) => {
+				return new Promise(resolve => {
+					const entranceMethod = el[browserEntranceMethodName as keyof Element];
+					if (typeof entranceMethod !== 'function') {
+						throw new Error(`Entrance method ${String(browserEntranceMethodName)} not found on element.`);
+					}
 
-				let entranceResult = (entranceMethod as any).apply(el, browserEntranceArgs);
-
-				if (entranceResult.then && typeof entranceResult.then === 'function') {
-					// Handle entrance methods which return a Promise.
-					entranceResult = await entranceResult;
-					resolve();
-				} else if (entranceResult instanceof (window as any).TimelineLite || entranceResult instanceof (window as any).TimelineMax) {
-					//  Handle entrance methods which return GSAP timeline.
-					setTimeout(() => {
-						entranceResult.call(() => {
+					let entranceResult = (entranceMethod as any).apply(el, browserEntranceArgs);
+					if (entranceResult.then && typeof entranceResult.then === 'function') {
+						// Handle entrance methods which return a Promise.
+						entranceResult.then(() => {
 							resolve();
 						});
-					}, 250);
-				} else if (entranceResult instanceof (window as any).TweenLite || entranceResult instanceof (window as any).TweenMax) {
-					//  Handle entrance methods which return a GSAP tween.
-					const tl = new (window as any).TimelineLite();
-					tl.add(entranceResult);
-					tl.call(() => {
+					} else if (
+						entranceResult instanceof (window as any).TimelineLite ||
+						entranceResult instanceof (window as any).TimelineMax
+					) {
+						//  Handle entrance methods which return GSAP timeline.
+						setTimeout(() => {
+							entranceResult.call(() => {
+								resolve();
+							});
+						}, 250);
+					} else if (
+						entranceResult instanceof (window as any).TweenLite ||
+						entranceResult instanceof (window as any).TweenMax
+					) {
+						//  Handle entrance methods which return a GSAP tween.
+						const tl = new (window as any).TimelineLite();
+						tl.add(entranceResult);
+						tl.call(() => {
+							resolve();
+						});
+					} else {
 						resolve();
-					});
-				} else {
-					resolve();
-				}
-			});
-		}, entranceMethodName, entranceMethodArgs);
+					}
+				});
+			},
+			entranceMethodName,
+			entranceMethodArgs,
+		);
 	}
 
 	if (delay > 0) {
 		if (spinner) {
 			spinner.text = `Delaying for ${delay} milliseconds`;
 		}
+
 		await sleep(delay);
 	}
 
@@ -160,7 +179,7 @@ export async function screenshotGraphic(page: Puppeteer.Page, {
 
 	await page.screenshot({
 		path: screenshotPath,
-		omitBackground: true
+		omitBackground: true,
 	});
 
 	if (captureLogs) {
@@ -172,15 +191,16 @@ export async function screenshotGraphic(page: Puppeteer.Page, {
 		fs.writeFileSync(logPath, logs.join('\n'));
 	}
 
-	if (!debug) { // tslint:disable-line:early-exit
+	if (!debug) {
 		if (spinner) {
 			spinner.text = 'Closing page...';
 		}
+
 		await page.close();
 	}
 }
 
-export function computeFullTestCaseName({route, nameAppendix}: {route: string; nameAppendix?: string}) {
+export function computeFullTestCaseName({ route, nameAppendix }: { route: string; nameAppendix?: string }): string {
 	let testName = route.split('/').pop();
 
 	if (testName) {
@@ -191,16 +211,16 @@ export function computeFullTestCaseName({route, nameAppendix}: {route: string; n
 		testName += '-' + nameAppendix;
 	}
 
-	return testName || '';
+	return testName ?? '';
 }
 
-export function computeTestCaseResolution(testCase: TestCase) {
+export function computeTestCaseResolution(testCase: TestCase): { width: number; height: number } {
 	let width = CONSTS.DEFAULT_WIDTH;
 	let height = CONSTS.DEFAULT_HEIGHT;
 
 	const graphicManifest = CONSTS.BUNDLE_MANIFEST.nodecg.graphics.find((graphic: any) => {
 		if (!graphic || typeof graphic !== 'object') {
-			return;
+			return false;
 		}
 
 		return testCase.route.endsWith(graphic.file);
@@ -211,10 +231,10 @@ export function computeTestCaseResolution(testCase: TestCase) {
 		height = graphicManifest.height;
 	}
 
-	return {width, height};
+	return { width, height };
 }
 
-function sleep(milliseconds: number) {
+async function sleep(milliseconds: number): Promise<void> {
 	return new Promise(resolve => {
 		setTimeout(() => {
 			resolve();

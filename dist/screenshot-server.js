@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 // Native
 const fs = require("fs");
@@ -22,7 +22,7 @@ app.get(`/bundles/${screenshot_consts_1.CONSTS.BUNDLE_NAME}/graphics*`, (req, re
         const scripts = [
             '<script src="/mock-nodecg.js"></script>',
             `<script>window.nodecg = new NodeCG({bundleName: '${screenshot_consts_1.CONSTS.BUNDLE_NAME}'})</script>`,
-            `<script>window.nodecg.bundleConfig = ${JSON.stringify(screenshot_consts_1.CONSTS.BUNDLE_CONFIG)};</script>`
+            `<script>window.nodecg.bundleConfig = ${JSON.stringify(screenshot_consts_1.CONSTS.BUNDLE_CONFIG)};</script>`,
         ];
         const scriptsString = scripts.join('\n');
         // Put our scripts before their first script or HTML import.
@@ -41,7 +41,7 @@ app.get(`/bundles/${screenshot_consts_1.CONSTS.BUNDLE_NAME}/graphics*`, (req, re
 if (screenshot_consts_1.CONSTS.BUNDLE_MANIFEST.nodecg.transformBareModuleSpecifiers) {
     app.use(`/bundles/${screenshot_consts_1.CONSTS.BUNDLE_NAME}/*`, express_transform_bare_module_specifiers_1.default({
         rootDir: process.env.NODECG_ROOT,
-        modulesUrl: `/bundles/${screenshot_consts_1.CONSTS.BUNDLE_NAME}/node_modules`
+        modulesUrl: `/bundles/${screenshot_consts_1.CONSTS.BUNDLE_NAME}/node_modules`,
     }));
 }
 app.use(`/bundles/${screenshot_consts_1.CONSTS.BUNDLE_NAME}`, express.static(screenshot_consts_1.CONSTS.BUNDLE_ROOT));
@@ -57,7 +57,7 @@ if (Array.isArray(screenshot_consts_1.CONSTS.CUSTOM_ROUTES)) {
 }
 let serverReference;
 let opened = false;
-exports.open = () => {
+exports.open = async () => {
     return new Promise((resolve, reject) => {
         if (opened) {
             reject(new Error('server is already opened'));
@@ -75,6 +75,7 @@ exports.open = () => {
     });
 };
 exports.close = () => {
-    return serverReference && serverReference.close();
+    var _a;
+    return (_a = serverReference) === null || _a === void 0 ? void 0 : _a.close();
 };
 //# sourceMappingURL=screenshot-server.js.map

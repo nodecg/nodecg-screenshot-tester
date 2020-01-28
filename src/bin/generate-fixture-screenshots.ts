@@ -1,16 +1,15 @@
 #!/usr/bin/env node
-'use strict';
 
 // Native
 import * as fs from 'fs';
 import * as path from 'path';
 
 // Packages
-import {argv} from 'yargs';
+import { argv } from 'yargs';
 import * as ora from 'ora';
 import pEachSeries = require('p-each-series');
 import pixelmatch = require('pixelmatch');
-import {PNG} from 'pngjs';
+import { PNG } from 'pngjs';
 import * as puppeteer from 'puppeteer';
 import * as tmp from 'tmp';
 
@@ -18,15 +17,15 @@ const DEBUG = argv.debug;
 
 // Ours
 import * as server from '../screenshot-server';
-import {CONSTS, TestCase} from '../screenshot-consts';
-import {screenshotGraphic, computeFullTestCaseName, computeTestCaseResolution} from '../screenshot-taker';
+import { CONSTS, TestCase } from '../screenshot-consts';
+import { screenshotGraphic, computeFullTestCaseName, computeTestCaseResolution } from '../screenshot-taker';
 
-const tmpDir = tmp.dirSync({unsafeCleanup: true}).name;
+const tmpDir = tmp.dirSync({ unsafeCleanup: true }).name;
 
 server.open().then(async () => {
 	const browser = await puppeteer.launch({
 		...CONSTS.PUPPETEER_LAUNCH_OPTS,
-		headless: !DEBUG
+		headless: !DEBUG,
 	});
 
 	const filterRegExp = new RegExp(argv.filter);
@@ -52,17 +51,14 @@ server.open().then(async () => {
 			await screenshotGraphic(page, testCase, {
 				spinner,
 				destinationDir: tmpDir,
-				debug: DEBUG
+				debug: DEBUG,
 			});
 
 			const newScreenshotPath = path.join(tmpDir, `${testCaseFileName}.png`);
 			const existingScreenshotPath = path.join(CONSTS.FIXTURE_SCREENSHOTS_DIR, `${testCaseFileName}.png`);
 
 			if (fs.existsSync(existingScreenshotPath)) {
-				const unchanged = await areScreenshotsIdentical(
-					newScreenshotPath,
-					existingScreenshotPath
-				);
+				const unchanged = await areScreenshotsIdentical(newScreenshotPath, existingScreenshotPath);
 
 				if (unchanged) {
 					spinner.info(`${testCaseFileName} screenshot unchanged.`);
@@ -77,7 +73,8 @@ server.open().then(async () => {
 				spinner.succeed(`${testCaseFileName} screenshot added!`);
 			}
 		} catch (e) {
-			spinner.fail(`${testCaseFileName} failed: ${e.message}`);
+			const message: string = e.message;
+			spinner.fail(`${testCaseFileName} failed: ${message}`);
 		}
 	});
 
@@ -89,7 +86,7 @@ server.open().then(async () => {
 	}
 });
 
-function areScreenshotsIdentical(pathA: string, pathB: string) {
+async function areScreenshotsIdentical(pathA: string, pathB: string): Promise<void | boolean | number> {
 	return new Promise(resolve => {
 		const rawImageA = fs.readFileSync(pathA);
 		const rawImageB = fs.readFileSync(pathB);
@@ -97,7 +94,7 @@ function areScreenshotsIdentical(pathA: string, pathB: string) {
 		const imageB = new PNG().parse(rawImageB, doneReading);
 
 		let filesRead = 0;
-		function doneReading() {
+		async function doneReading(): Promise<void | boolean | number> {
 			// Wait until both files are read.
 			if (++filesRead < 2) {
 				return;
@@ -108,11 +105,10 @@ function areScreenshotsIdentical(pathA: string, pathB: string) {
 			}
 
 			// Do the visual diff.
-			const diff = new PNG({width: imageA.width, height: imageB.height});
-			const numDiffPixels = pixelmatch(
-				imageA.data, imageB.data, diff.data, imageA.width, imageA.height,
-				{threshold: 0.1}
-			);
+			const diff = new PNG({ width: imageA.width, height: imageB.height });
+			const numDiffPixels = pixelmatch(imageA.data, imageB.data, diff.data, imageA.width, imageA.height, {
+				threshold: 0.1,
+			});
 
 			return resolve(numDiffPixels === 0);
 		}

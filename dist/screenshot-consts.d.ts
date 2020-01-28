@@ -10,7 +10,7 @@ export interface TestCase {
     replicantPrefills?: {
         [key: string]: any;
     };
-    before?: Function;
+    before?: (...args: any[]) => any;
     metadata?: {
         [key: string]: any;
     };

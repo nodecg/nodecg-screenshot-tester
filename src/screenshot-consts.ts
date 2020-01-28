@@ -1,10 +1,10 @@
-'use strict';
+/* eslint-disable @typescript-eslint/no-var-requires */
 
 // Native
 import * as fs from 'fs';
 import * as path from 'path';
 import * as puppeteer from 'puppeteer';
-import {Handler} from 'express';
+import { Handler } from 'express';
 
 let BUNDLE_ROOT;
 try {
@@ -13,10 +13,8 @@ try {
 	BUNDLE_ROOT = findBundleRoot(process.cwd());
 }
 
-/* tslint:disable:no-var-requires */
 const constsFromBundle = require(path.join(BUNDLE_ROOT, 'test/helpers/screenshot-consts'));
 const bundleManifest = require(path.join(BUNDLE_ROOT, 'package.json'));
-/* tslint:enable:no-var-requires */
 
 export interface TestCase {
 	route: string;
@@ -25,9 +23,9 @@ export interface TestCase {
 	additionalDelay?: number;
 	entranceMethodName?: string;
 	entranceMethodArgs?: any[];
-	replicantPrefills?: {[key: string]: any};
-	before?: Function;
-	metadata?: {[key: string]: any};
+	replicantPrefills?: { [key: string]: any };
+	before?: (...args: any[]) => any;
+	metadata?: { [key: string]: any };
 }
 
 export interface CustomRoute {
@@ -43,7 +41,7 @@ export interface ConstsInterface {
 	BUNDLE_NAME: string;
 	BUNDLE_ROOT: string;
 	BUNDLE_MANIFEST: any;
-	BUNDLE_CONFIG: {[keys: string]: any};
+	BUNDLE_CONFIG: { [keys: string]: any };
 	FIXTURE_SCREENSHOTS_DIR: string;
 	PUPPETEER_LAUNCH_OPTS: puppeteer.LaunchOptions;
 	TEST_CASES: TestCase[];
@@ -61,17 +59,14 @@ const baseConsts = {
 	FIXTURE_SCREENSHOTS_DIR: path.join(BUNDLE_ROOT, 'test/fixtures/screenshots'),
 	PUPPETEER_LAUNCH_OPTS: {
 		headless: true,
-		args: [
-			'--disable-gpu',
-			'--autoplay-policy=no-user-gesture-required'
-		]
-	}
+		args: ['--disable-gpu', '--autoplay-policy=no-user-gesture-required'],
+	},
 };
 
-export const CONSTS = {
+export const CONSTS: ConstsInterface = {
 	...baseConsts,
-	...constsFromBundle
-} as ConstsInterface;
+	...constsFromBundle,
+};
 
 function findBundleRoot(dir: string): string {
 	const packageJsonPath = path.join(dir, 'package.json');

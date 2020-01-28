@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 // Native
 const fs = require("fs");
@@ -6,8 +6,8 @@ const path = require("path");
 // Ours
 const screenshot_consts_1 = require("./screenshot-consts");
 const DEFAULT_SELECTOR = 'body';
-async function screenshotGraphic(page, { route, nameAppendix = '', selector = DEFAULT_SELECTOR, entranceMethodName = '', entranceMethodArgs = [], additionalDelay = 0, before, replicantPrefills }, { spinner, destinationDir, captureLogs = false, debug = false }) {
-    const url = `http://127.0.0.1:${screenshot_consts_1.CONSTS.PORT}/${route}`; // tslint:disable-line:no-http-string
+async function screenshotGraphic(page, { route, nameAppendix = '', selector = DEFAULT_SELECTOR, entranceMethodName = '', entranceMethodArgs = [], additionalDelay = 0, before, replicantPrefills, }, { spinner, destinationDir, captureLogs = false, debug = false }) {
+    const url = `http://127.0.0.1:${screenshot_consts_1.CONSTS.PORT}/${route}`;
     const screenshotFilename = `${computeFullTestCaseName({ route, nameAppendix })}.png`;
     const screenshotPath = path.join(destinationDir, screenshotFilename);
     let delay = additionalDelay;
@@ -24,7 +24,7 @@ async function screenshotGraphic(page, { route, nameAppendix = '', selector = DE
     page.goto(url);
     await Promise.all([
         page.waitForNavigation({ waitUntil: 'load' }),
-        page.waitForNavigation({ waitUntil: 'networkidle0' })
+        page.waitForNavigation({ waitUntil: 'networkidle0' }),
     ]);
     if (spinner) {
         spinner.text = `Waiting until ${selector} is on the page...`;
@@ -39,7 +39,8 @@ async function screenshotGraphic(page, { route, nameAppendix = '', selector = DE
         spinner.text = 'Stubbing APIs...';
     }
     await page.evaluate(() => {
-        window.nodecg.playSound = () => { }; // tslint:disable-line:no-empty
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        window.nodecg.playSound = () => { };
     });
     if (replicantPrefills && Object.keys(replicantPrefills).length > 0) {
         if (spinner) {
@@ -47,7 +48,7 @@ async function screenshotGraphic(page, { route, nameAppendix = '', selector = DE
         }
         const prefilledReplicants = {};
         Object.entries(replicantPrefills).forEach(([key, value]) => {
-            if (value === undefined) { // tslint:disable-line:early-exit
+            if (value === undefined) {
                 const filePath = path.resolve(screenshot_consts_1.CONSTS.BUNDLE_ROOT, 'test/fixtures/replicants', `${encodeURIComponent(key)}.rep`);
                 const fileContents = fs.readFileSync(filePath, 'utf-8');
                 prefilledReplicants[key] = JSON.parse(fileContents);
@@ -58,6 +59,7 @@ async function screenshotGraphic(page, { route, nameAppendix = '', selector = DE
         });
         await page.evaluate(browserPrefilledReplicants => {
             Object.entries(browserPrefilledReplicants).forEach(([key, value]) => {
+                // eslint-disable-next-line new-cap
                 const replicant = window.nodecg.Replicant(key);
                 replicant.status = 'declared';
                 replicant.value = value;
@@ -77,19 +79,21 @@ async function screenshotGraphic(page, { route, nameAppendix = '', selector = DE
             spinner.text = 'Waiting for entrance animation to complete...';
         }
         await element.click(); // Necessary to get media to play in some circumstances.
-        await page.$eval(selector, (el, browserEntranceMethodName, browserEntranceArgs) => {
-            return new Promise(async (resolve) => {
+        await page.$eval(selector, async (el, browserEntranceMethodName, browserEntranceArgs) => {
+            return new Promise(resolve => {
                 const entranceMethod = el[browserEntranceMethodName];
                 if (typeof entranceMethod !== 'function') {
-                    throw new Error(`Entrance method ${browserEntranceMethodName} not found on element.`);
+                    throw new Error(`Entrance method ${String(browserEntranceMethodName)} not found on element.`);
                 }
                 let entranceResult = entranceMethod.apply(el, browserEntranceArgs);
                 if (entranceResult.then && typeof entranceResult.then === 'function') {
                     // Handle entrance methods which return a Promise.
-                    entranceResult = await entranceResult;
-                    resolve();
+                    entranceResult.then(() => {
+                        resolve();
+                    });
                 }
-                else if (entranceResult instanceof window.TimelineLite || entranceResult instanceof window.TimelineMax) {
+                else if (entranceResult instanceof window.TimelineLite ||
+                    entranceResult instanceof window.TimelineMax) {
                     //  Handle entrance methods which return GSAP timeline.
                     setTimeout(() => {
                         entranceResult.call(() => {
@@ -97,7 +101,8 @@ async function screenshotGraphic(page, { route, nameAppendix = '', selector = DE
                         });
                     }, 250);
                 }
-                else if (entranceResult instanceof window.TweenLite || entranceResult instanceof window.TweenMax) {
+                else if (entranceResult instanceof window.TweenLite ||
+                    entranceResult instanceof window.TweenMax) {
                     //  Handle entrance methods which return a GSAP tween.
                     const tl = new window.TimelineLite();
                     tl.add(entranceResult);
@@ -122,7 +127,7 @@ async function screenshotGraphic(page, { route, nameAppendix = '', selector = DE
     }
     await page.screenshot({
         path: screenshotPath,
-        omitBackground: true
+        omitBackground: true,
     });
     if (captureLogs) {
         if (spinner) {
@@ -131,7 +136,7 @@ async function screenshotGraphic(page, { route, nameAppendix = '', selector = DE
         const logPath = screenshotPath.replace(/\.png$/, '.log');
         fs.writeFileSync(logPath, logs.join('\n'));
     }
-    if (!debug) { // tslint:disable-line:early-exit
+    if (!debug) {
         if (spinner) {
             spinner.text = 'Closing page...';
         }
@@ -147,7 +152,7 @@ function computeFullTestCaseName({ route, nameAppendix }) {
     if (nameAppendix) {
         testName += '-' + nameAppendix;
     }
-    return testName || '';
+    return (testName !== null && testName !== void 0 ? testName : '');
 }
 exports.computeFullTestCaseName = computeFullTestCaseName;
 function computeTestCaseResolution(testCase) {
@@ -155,7 +160,7 @@ function computeTestCaseResolution(testCase) {
     let height = screenshot_consts_1.CONSTS.DEFAULT_HEIGHT;
     const graphicManifest = screenshot_consts_1.CONSTS.BUNDLE_MANIFEST.nodecg.graphics.find((graphic) => {
         if (!graphic || typeof graphic !== 'object') {
-            return;
+            return false;
         }
         return testCase.route.endsWith(graphic.file);
     });
@@ -166,7 +171,7 @@ function computeTestCaseResolution(testCase) {
     return { width, height };
 }
 exports.computeTestCaseResolution = computeTestCaseResolution;
-function sleep(milliseconds) {
+async function sleep(milliseconds) {
     return new Promise(resolve => {
         setTimeout(() => {
             resolve();

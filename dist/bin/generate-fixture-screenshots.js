@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-'use strict';
+"use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 // Native
 const fs = require("fs");
@@ -19,7 +19,7 @@ const screenshot_consts_1 = require("../screenshot-consts");
 const screenshot_taker_1 = require("../screenshot-taker");
 const tmpDir = tmp.dirSync({ unsafeCleanup: true }).name;
 server.open().then(async () => {
-    const browser = await puppeteer.launch(Object.assign({}, screenshot_consts_1.CONSTS.PUPPETEER_LAUNCH_OPTS, { headless: !DEBUG }));
+    const browser = await puppeteer.launch(Object.assign(Object.assign({}, screenshot_consts_1.CONSTS.PUPPETEER_LAUNCH_OPTS), { headless: !DEBUG }));
     const filterRegExp = new RegExp(yargs_1.argv.filter);
     if (yargs_1.argv.filter) {
         console.log('Filter:', filterRegExp);
@@ -40,7 +40,7 @@ server.open().then(async () => {
             await screenshot_taker_1.screenshotGraphic(page, testCase, {
                 spinner,
                 destinationDir: tmpDir,
-                debug: DEBUG
+                debug: DEBUG,
             });
             const newScreenshotPath = path.join(tmpDir, `${testCaseFileName}.png`);
             const existingScreenshotPath = path.join(screenshot_consts_1.CONSTS.FIXTURE_SCREENSHOTS_DIR, `${testCaseFileName}.png`);
@@ -62,7 +62,8 @@ server.open().then(async () => {
             }
         }
         catch (e) {
-            spinner.fail(`${testCaseFileName} failed: ${e.message}`);
+            const message = e.message;
+            spinner.fail(`${testCaseFileName} failed: ${message}`);
         }
     });
     console.log(`\nFixture screenshots can be viewed at:\nfile:///${screenshot_consts_1.CONSTS.FIXTURE_SCREENSHOTS_DIR}`);
@@ -71,14 +72,14 @@ server.open().then(async () => {
         browser.close();
     }
 });
-function areScreenshotsIdentical(pathA, pathB) {
+async function areScreenshotsIdentical(pathA, pathB) {
     return new Promise(resolve => {
         const rawImageA = fs.readFileSync(pathA);
         const rawImageB = fs.readFileSync(pathB);
         const imageA = new pngjs_1.PNG().parse(rawImageA, doneReading);
         const imageB = new pngjs_1.PNG().parse(rawImageB, doneReading);
         let filesRead = 0;
-        function doneReading() {
+        async function doneReading() {
             // Wait until both files are read.
             if (++filesRead < 2) {
                 return;
@@ -88,7 +89,9 @@ function areScreenshotsIdentical(pathA, pathB) {
             }
             // Do the visual diff.
             const diff = new pngjs_1.PNG({ width: imageA.width, height: imageB.height });
-            const numDiffPixels = pixelmatch(imageA.data, imageB.data, diff.data, imageA.width, imageA.height, { threshold: 0.1 });
+            const numDiffPixels = pixelmatch(imageA.data, imageB.data, diff.data, imageA.width, imageA.height, {
+                threshold: 0.1,
+            });
             return resolve(numDiffPixels === 0);
         }
     });

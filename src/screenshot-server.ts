@@ -1,9 +1,7 @@
-'use strict';
-
 // Native
 import * as fs from 'fs';
 import * as path from 'path';
-import {Server} from 'http';
+import { Server } from 'http';
 
 // Packages
 import * as cheerio from 'cheerio';
@@ -11,7 +9,7 @@ import * as express from 'express';
 import transformMiddleware from 'express-transform-bare-module-specifiers';
 
 // Ours
-import {CONSTS} from './screenshot-consts';
+import { CONSTS } from './screenshot-consts';
 
 const app = express();
 
@@ -30,7 +28,7 @@ app.get(`/bundles/${CONSTS.BUNDLE_NAME}/graphics*`, (req, res, next) => {
 		const scripts = [
 			'<script src="/mock-nodecg.js"></script>',
 			`<script>window.nodecg = new NodeCG({bundleName: '${CONSTS.BUNDLE_NAME}'})</script>`,
-			`<script>window.nodecg.bundleConfig = ${JSON.stringify(CONSTS.BUNDLE_CONFIG)};</script>`
+			`<script>window.nodecg.bundleConfig = ${JSON.stringify(CONSTS.BUNDLE_CONFIG)};</script>`,
 		];
 
 		const scriptsString = scripts.join('\n');
@@ -51,35 +49,36 @@ app.get(`/bundles/${CONSTS.BUNDLE_NAME}/graphics*`, (req, res, next) => {
 });
 
 if (CONSTS.BUNDLE_MANIFEST.nodecg.transformBareModuleSpecifiers) {
-	app.use(`/bundles/${CONSTS.BUNDLE_NAME}/*`, transformMiddleware({
-		rootDir: process.env.NODECG_ROOT,
-		modulesUrl: `/bundles/${CONSTS.BUNDLE_NAME}/node_modules`
-	}));
+	app.use(
+		`/bundles/${CONSTS.BUNDLE_NAME}/*`,
+		transformMiddleware({
+			rootDir: process.env.NODECG_ROOT,
+			modulesUrl: `/bundles/${CONSTS.BUNDLE_NAME}/node_modules`,
+		}),
+	);
 }
 
 app.use(`/bundles/${CONSTS.BUNDLE_NAME}`, express.static(CONSTS.BUNDLE_ROOT));
 
 app.use(
 	`/bundles/${CONSTS.BUNDLE_NAME}/test/fixtures/static`,
-	express.static(path.resolve(CONSTS.BUNDLE_ROOT, 'test/fixtures/static'))
+	express.static(path.resolve(CONSTS.BUNDLE_ROOT, 'test/fixtures/static')),
 );
 
 app.use('/mock-nodecg.js', async (_req, res) => {
 	const mockNodecgDir = path.parse(require.resolve('mock-nodecg')).dir;
-	return res.sendFile(
-		path.join(mockNodecgDir, 'dist/mock-nodecg.js')
-	);
+	return res.sendFile(path.join(mockNodecgDir, 'dist/mock-nodecg.js'));
 });
 
 if (Array.isArray(CONSTS.CUSTOM_ROUTES)) {
-	CONSTS.CUSTOM_ROUTES.forEach(({method, route, handler}) => {
+	CONSTS.CUSTOM_ROUTES.forEach(({ method, route, handler }) => {
 		app[method](route, handler);
 	});
 }
 
 let serverReference: Server;
 let opened = false;
-export const open = () => {
+export const open = async (): Promise<Server> => {
 	return new Promise((resolve, reject) => {
 		if (opened) {
 			reject(new Error('server is already opened'));
@@ -97,6 +96,6 @@ export const open = () => {
 	});
 };
 
-export const close = () => {
-	return serverReference && serverReference.close();
+export const close = (): void | Server => {
+	return serverReference?.close();
 };

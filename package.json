@@ -5,7 +5,8 @@
   "main": "dist/index.js",
   "scripts": {
     "test": "npm run static",
-    "static": "tslint -c tslint.json 'src/**/*.ts'",
+    "format": "pretty-quick",
+    "static": "eslint --parser-options=project:tsconfig.json \"src/**/*.ts\"",
     "prebuild": "npm run test",
     "build": "trash dist && tsc -p tsconfig.json",
     "prerelease": "npm t",
@@ -19,8 +20,8 @@
     "express": "^4.16.4",
     "express-transform-bare-module-specifiers": "^1.0.2",
     "mkdirp": "^0.5.1",
-    "ora": "^2.1.0",
     "mock-nodecg": "^1.8.0",
+    "ora": "^2.1.0",
     "p-each-series": "^1.0.0",
     "pixelmatch": "^4.0.2",
     "pngjs": "^3.4.0",
@@ -30,6 +31,10 @@
     "yargs": "^11.0.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "^7.5.2",
+    "@commitlint/config-conventional": "^7.5.0",
+    "@gamesdonequick/eslint-config": "^2.1.0",
+    "@gamesdonequick/prettier-config": "^2.2.0",
     "@types/cheerio": "^0.22.7",
     "@types/express": "^4.16.0",
     "@types/mkdirp": "^0.5.2",
@@ -41,12 +46,14 @@
     "@types/puppeteer": "^1.3.2",
     "@types/tmp": "0.0.33",
     "@types/yargs": "^11.0.0",
+    "@typescript-eslint/eslint-plugin": "^2.18.0",
     "ava": "^1.4.1",
+    "eslint": "^6.8.0",
+    "prettier": "^1.19.1",
+    "pretty-quick": "^2.0.1",
     "trash-cli": "^1.4.0",
-    "ts-node": "^6.0.3",
-    "tslint": "^5.10.0",
-    "tslint-xo": "^0.7.2",
-    "typescript": "^2.8.3"
+    "ts-node": "^8.6.2",
+    "typescript": "^3.7.5"
   },
   "peerDependencies": {
     "ava": "^1.2.0"
@@ -58,5 +65,11 @@
     "type": "git",
     "url": "git+https://github.com/nodecg/nodecg-screenshot-tester.git"
   },
-  "types": "dist/index.d.ts"
+  "types": "dist/index.d.ts",
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-commit": "pretty-quick --staged"
+    }
+  }
 }

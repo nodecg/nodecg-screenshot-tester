@@ -1,22 +1,20 @@
-'use strict';
-
 // Native
 import * as fs from 'fs';
 
 // Packages
 import pixelmatch = require('pixelmatch');
-import {PNG} from 'pngjs';
+import { PNG } from 'pngjs';
 import * as puppeteer from 'puppeteer';
 import * as ava from 'ava';
 
 // Ours
 import * as server from './screenshot-server';
-import {screenshotGraphic, computeFullTestCaseName, computeTestCaseResolution} from './screenshot-taker';
-import {CONSTS, TestCase} from './screenshot-consts';
-import {makeTempDir} from './make-temp-dir';
-import {argv} from 'yargs';
+import { screenshotGraphic, computeFullTestCaseName, computeTestCaseResolution } from './screenshot-taker';
+import { CONSTS, TestCase } from './screenshot-consts';
+import { makeTempDir } from './make-temp-dir';
+import { argv } from 'yargs';
 
-export const comparisonTests = (test: ava.TestInterface) => {
+export const comparisonTests = async (test: ava.TestInterface): Promise<void> => {
 	const tempDir = makeTempDir(test);
 	let _browser: puppeteer.Browser;
 	test.before(async () => {
@@ -53,7 +51,7 @@ export const comparisonTests = (test: ava.TestInterface) => {
 
 			await screenshotGraphic(page, testCase, {
 				captureLogs: true,
-				destinationDir: tempDir
+				destinationDir: tempDir,
 			});
 
 			const fileName = computeFullTestCaseName(testCase);
@@ -61,7 +59,7 @@ export const comparisonTests = (test: ava.TestInterface) => {
 		});
 	});
 
-	function compareScreenshots(t: ava.ExecutionContext, fileName: string) {
+	async function compareScreenshots(t: ava.ExecutionContext, fileName: string): Promise<void> {
 		return new Promise(resolve => {
 			const rawResultImage = fs.readFileSync(`${tempDir}/${fileName}.png`);
 			const rawFixtureImage = fs.readFileSync(`${CONSTS.FIXTURE_SCREENSHOTS_DIR}/${fileName}.png`);
@@ -69,7 +67,7 @@ export const comparisonTests = (test: ava.TestInterface) => {
 			const fixtureImage = new PNG().parse(rawFixtureImage, doneReading);
 
 			let filesRead = 0;
-			function doneReading() {
+			async function doneReading(): Promise<void> {
 				// Wait until both files are read.
 				if (++filesRead < 2) {
 					return;
@@ -80,10 +78,14 @@ export const comparisonTests = (test: ava.TestInterface) => {
 				t.is(resultImage.height, fixtureImage.height, 'image heights are the same');
 
 				// Do the visual diff.
-				const diff = new PNG({width: resultImage.width, height: fixtureImage.height});
+				const diff = new PNG({ width: resultImage.width, height: fixtureImage.height });
 				const numDiffPixels = pixelmatch(
-					resultImage.data, fixtureImage.data, diff.data, resultImage.width, resultImage.height,
-					{threshold: 0.1}
+					resultImage.data,
+					fixtureImage.data,
+					diff.data,
+					resultImage.width,
+					resultImage.height,
+					{ threshold: 0.1 },
 				);
 
 				if (numDiffPixels > 0) {

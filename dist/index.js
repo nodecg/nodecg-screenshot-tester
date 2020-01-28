@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 // Native
 const fs = require("fs");
@@ -12,7 +12,7 @@ const screenshot_taker_1 = require("./screenshot-taker");
 const screenshot_consts_1 = require("./screenshot-consts");
 const make_temp_dir_1 = require("./make-temp-dir");
 const yargs_1 = require("yargs");
-exports.comparisonTests = (test) => {
+exports.comparisonTests = async (test) => {
     const tempDir = make_temp_dir_1.makeTempDir(test);
     let _browser;
     test.before(async () => {
@@ -43,20 +43,20 @@ exports.comparisonTests = (test) => {
             });
             await screenshot_taker_1.screenshotGraphic(page, testCase, {
                 captureLogs: true,
-                destinationDir: tempDir
+                destinationDir: tempDir,
             });
             const fileName = screenshot_taker_1.computeFullTestCaseName(testCase);
             return compareScreenshots(t, fileName);
         });
     });
-    function compareScreenshots(t, fileName) {
+    async function compareScreenshots(t, fileName) {
         return new Promise(resolve => {
             const rawResultImage = fs.readFileSync(`${tempDir}/${fileName}.png`);
             const rawFixtureImage = fs.readFileSync(`${screenshot_consts_1.CONSTS.FIXTURE_SCREENSHOTS_DIR}/${fileName}.png`);
             const resultImage = new pngjs_1.PNG().parse(rawResultImage, doneReading);
             const fixtureImage = new pngjs_1.PNG().parse(rawFixtureImage, doneReading);
             let filesRead = 0;
-            function doneReading() {
+            async function doneReading() {
                 // Wait until both files are read.
                 if (++filesRead < 2) {
                     return;
