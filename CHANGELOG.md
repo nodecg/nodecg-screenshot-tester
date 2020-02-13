@@ -2,6 +2,36 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="7.0.0"></a>
+# [7.0.0](https://github.com/nodecg/nodecg-screenshot-tester/compare/v6.0.0...v7.0.0) (2020-02-13)
+
+
+### Bug Fixes
+
+* ensure loads are done before taking screenshot ([90ea8fc](https://github.com/nodecg/nodecg-screenshot-tester/commit/90ea8fc))
+
+
+### Chores
+
+* migrate to eslint, add prettier ([92a2b43](https://github.com/nodecg/nodecg-screenshot-tester/commit/92a2b43))
+
+
+### Features
+
+* add optional "after" callback ([e7e5432](https://github.com/nodecg/nodecg-screenshot-tester/commit/e7e5432))
+* allow generate-fixture-screenshots to run in parallel ([1c86118](https://github.com/nodecg/nodecg-screenshot-tester/commit/1c86118))
+* augment window type ([4df22b6](https://github.com/nodecg/nodecg-screenshot-tester/commit/4df22b6))
+
+
+### BREAKING CHANGES
+
+* By default, generate-fixture-screenshots now runs in parallel. The concurrency is automatically computed based on the number of physical CPU cores detected. This might expose flakiness in screenshots that previously seemed reliable when running under a less-strained system.
+
+If you need to stick to running tests one-at-a-time, pass in the --concurrency=1 flag.
+* some code has changed in subtle ways that could alter the behavior of the program. It _shouldn't_, but it _could_.
+
+
+
 <a name="6.0.0"></a>
 # [6.0.0](https://github.com/nodecg/nodecg-screenshot-tester/compare/v5.1.0...v6.0.0) (2020-01-28)
 
