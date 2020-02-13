@@ -11,7 +11,7 @@ try {
 catch (_a) {
     BUNDLE_ROOT = findBundleRoot(process.cwd());
 }
-const constsFromBundle = require(path.join(BUNDLE_ROOT, 'test/helpers/screenshot-consts'));
+const constsFromBundle = require(global.testDefPath);
 const bundleManifest = require(path.join(BUNDLE_ROOT, 'package.json'));
 const baseConsts = {
     DEFAULT_WIDTH: 1920,

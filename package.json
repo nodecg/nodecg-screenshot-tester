@@ -2,7 +2,6 @@
   "name": "nodecg-screenshot-tester",
   "version": "7.0.0",
   "description": "Automated visual regression testing of NodeCG graphics.",
-  "main": "dist/index.js",
   "scripts": {
     "test": "npm run static",
     "format": "pretty-quick",
@@ -68,7 +67,7 @@
     "ava": "^1.2.0"
   },
   "bin": {
-    "generate-fixture-screenshots": "dist/bin/generate-fixture-screenshots.js"
+    "nodecg-screenshot-tester": "dist/bin/main.js"
   },
   "repository": {
     "type": "git",
@@ -84,5 +83,8 @@
   "files": [
     "dist",
     "types/augment-window.d.ts"
-  ]
+  ],
+  "engines": {
+    "node": ">=10"
+  }
 }

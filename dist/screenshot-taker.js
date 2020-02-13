@@ -5,11 +5,11 @@ const fs = require("fs");
 const path = require("path");
 // Ours
 const screenshot_consts_1 = require("./screenshot-consts");
-const wait_for_network_idle_1 = require("./wait-for-network-idle");
+const util_1 = require("./util");
 const DEFAULT_SELECTOR = 'body';
 async function screenshotGraphic(page, { route, nameAppendix = '', selector = DEFAULT_SELECTOR, entranceMethodName = '', entranceMethodArgs = [], additionalDelay = 0, before, after, replicantPrefills, }, { destinationDir, captureLogs = false, debug = false }) {
     const url = `http://127.0.0.1:${screenshot_consts_1.CONSTS.PORT}/${route}`;
-    const screenshotFilename = `${computeFullTestCaseName({ route, nameAppendix })}.png`;
+    const screenshotFilename = `${util_1.calcTestCaseName({ route, nameAppendix })}.png`;
     const screenshotPath = path.join(destinationDir, screenshotFilename);
     let delay = additionalDelay;
     if (process.env.CI && process.env.CI.toLowerCase() === 'true') {
@@ -74,24 +74,6 @@ async function screenshotGraphic(page, { route, nameAppendix = '', selector = DE
                         resolve();
                     });
                 }
-                else if (entranceResult instanceof window.TimelineLite ||
-                    entranceResult instanceof window.TimelineMax) {
-                    //  Handle entrance methods which return GSAP timeline.
-                    setTimeout(() => {
-                        entranceResult.call(() => {
-                            resolve();
-                        });
-                    }, 250);
-                }
-                else if (entranceResult instanceof window.TweenLite ||
-                    entranceResult instanceof window.TweenMax) {
-                    //  Handle entrance methods which return a GSAP tween.
-                    const tl = new window.TimelineLite();
-                    tl.add(entranceResult);
-                    tl.call(() => {
-                        resolve();
-                    });
-                }
                 else {
                     resolve();
                 }
@@ -102,9 +84,9 @@ async function screenshotGraphic(page, { route, nameAppendix = '', selector = DE
         await after(page, element);
     }
     if (delay > 0) {
-        await sleep(delay);
+        await util_1.sleep(delay);
     }
-    await wait_for_network_idle_1.waitForNetworkIdle(page);
+    await util_1.waitForNetworkIdle(page);
     await page.screenshot({
         path: screenshotPath,
         omitBackground: true,
@@ -118,38 +100,4 @@ async function screenshotGraphic(page, { route, nameAppendix = '', selector = DE
     }
 }
 exports.screenshotGraphic = screenshotGraphic;
-function computeFullTestCaseName({ route, nameAppendix }) {
-    let testName = route.split('/').pop();
-    if (testName) {
-        testName = testName.split('?')[0];
-    }
-    if (nameAppendix) {
-        testName += '-' + nameAppendix;
-    }
-    return (testName !== null && testName !== void 0 ? testName : '');
-}
-exports.computeFullTestCaseName = computeFullTestCaseName;
-function computeTestCaseResolution(testCase) {
-    let width = screenshot_consts_1.CONSTS.DEFAULT_WIDTH;
-    let height = screenshot_consts_1.CONSTS.DEFAULT_HEIGHT;
-    const graphicManifest = screenshot_consts_1.CONSTS.BUNDLE_MANIFEST.nodecg.graphics.find((graphic) => {
-        if (!graphic || typeof graphic !== 'object') {
-            return false;
-        }
-        return testCase.route.endsWith(graphic.file);
-    });
-    if (graphicManifest) {
-        width = graphicManifest.width;
-        height = graphicManifest.height;
-    }
-    return { width, height };
-}
-exports.computeTestCaseResolution = computeTestCaseResolution;
-async function sleep(milliseconds) {
-    return new Promise(resolve => {
-        setTimeout(() => {
-            resolve();
-        }, milliseconds);
-    });
-}
 //# sourceMappingURL=screenshot-taker.js.map
