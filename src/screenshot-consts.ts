@@ -25,6 +25,7 @@ export interface TestCase {
 	entranceMethodArgs?: any[];
 	replicantPrefills?: { [key: string]: any };
 	before?: (page: puppeteer.Page, element?: puppeteer.ElementHandle) => any;
+	after?: (page: puppeteer.Page, element?: puppeteer.ElementHandle) => any;
 	metadata?: { [key: string]: any };
 }
 

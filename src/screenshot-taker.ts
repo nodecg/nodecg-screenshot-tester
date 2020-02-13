@@ -24,6 +24,7 @@ export async function screenshotGraphic(
 		entranceMethodArgs = [],
 		additionalDelay = 0,
 		before,
+		after,
 		replicantPrefills,
 	}: TestCase,
 	{ destinationDir, captureLogs = false, debug = false }: ScreenshotOptions,
@@ -137,6 +138,10 @@ export async function screenshotGraphic(
 			entranceMethodName,
 			entranceMethodArgs,
 		);
+	}
+
+	if (after) {
+		await after(page, element);
 	}
 
 	if (delay > 0) {

@@ -5,7 +5,7 @@ export interface ScreenshotOptions {
     captureLogs?: boolean;
     debug?: boolean;
 }
-export declare function screenshotGraphic(page: Puppeteer.Page, { route, nameAppendix, selector, entranceMethodName, entranceMethodArgs, additionalDelay, before, replicantPrefills, }: TestCase, { destinationDir, captureLogs, debug }: ScreenshotOptions): Promise<void>;
+export declare function screenshotGraphic(page: Puppeteer.Page, { route, nameAppendix, selector, entranceMethodName, entranceMethodArgs, additionalDelay, before, after, replicantPrefills, }: TestCase, { destinationDir, captureLogs, debug }: ScreenshotOptions): Promise<void>;
 export declare function computeFullTestCaseName({ route, nameAppendix }: {
     route: string;
     nameAppendix?: string;
