@@ -17,7 +17,7 @@
 		"noUnusedParameters": true,
 		"outDir": "./dist",
 		"paths": {
-			"*": ["./node_modules/*", "./src/types/*"]
+			"*": ["./node_modules/*"]
 		},
 		"pretty": true,
 		"sourceMap": true,
@@ -27,7 +27,7 @@
 		"traceResolution": false,
 		"types": ["node"]
 	},
-	"include": ["./src/**/*.ts", "types/physical-cpu-count.d.ts"],
+	"include": ["src/**/*.ts", "types/**/*.d.ts"],
 	"exclude": ["node_modules/**", "src/**/*spec.ts"],
 	"compileOnSave": false
 }
