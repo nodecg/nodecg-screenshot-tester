@@ -1,5 +1,5 @@
-import { TestCase } from './screenshot-consts';
 import * as Puppeteer from 'puppeteer';
+import { TestCase } from './screenshot-consts';
 export interface ScreenshotOptions {
     destinationDir: string;
     captureLogs?: boolean;

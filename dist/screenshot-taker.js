@@ -5,6 +5,7 @@ const fs = require("fs");
 const path = require("path");
 // Ours
 const screenshot_consts_1 = require("./screenshot-consts");
+const wait_for_network_idle_1 = require("./wait-for-network-idle");
 const DEFAULT_SELECTOR = 'body';
 async function screenshotGraphic(page, { route, nameAppendix = '', selector = DEFAULT_SELECTOR, entranceMethodName = '', entranceMethodArgs = [], additionalDelay = 0, before, after, replicantPrefills, }, { destinationDir, captureLogs = false, debug = false }) {
     const url = `http://127.0.0.1:${screenshot_consts_1.CONSTS.PORT}/${route}`;
@@ -85,6 +86,7 @@ async function screenshotGraphic(page, { route, nameAppendix = '', selector = DE
     if (delay > 0) {
         await sleep(delay);
     }
+    await wait_for_network_idle_1.waitForNetworkIdle(page);
     await page.screenshot({
         path: screenshotPath,
         omitBackground: true,

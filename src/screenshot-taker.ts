@@ -2,9 +2,12 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
+// Packages
+import * as Puppeteer from 'puppeteer';
+
 // Ours
 import { CONSTS, TestCase } from './screenshot-consts';
-import * as Puppeteer from 'puppeteer';
+import { waitForNetworkIdle } from './wait-for-network-idle';
 
 const DEFAULT_SELECTOR = 'body';
 
@@ -127,6 +130,8 @@ export async function screenshotGraphic(
 	if (delay > 0) {
 		await sleep(delay);
 	}
+
+	await waitForNetworkIdle(page);
 
 	await page.screenshot({
 		path: screenshotPath,
