@@ -10,7 +10,8 @@ export interface TestCase {
     replicantPrefills?: {
         [key: string]: any;
     };
-    before?: (...args: any[]) => any;
+    before?: (page: puppeteer.Page, element?: puppeteer.ElementHandle) => any;
+    after?: (page: puppeteer.Page, element?: puppeteer.ElementHandle) => any;
     metadata?: {
         [key: string]: any;
     };

@@ -5,10 +5,7 @@
 		"declaration": true,
 		"forceConsistentCasingInFileNames": true,
 		"importHelpers": true,
-		"lib": [
-			"dom",
-			"es2017"
-		],
+		"lib": ["dom", "es2017"],
 		"listFiles": false,
 		"module": "commonjs",
 		"moduleResolution": "node",
@@ -20,10 +17,7 @@
 		"noUnusedParameters": true,
 		"outDir": "./dist",
 		"paths": {
-			"*": [
-				"./node_modules/*",
-				"./src/types/*"
-			]
+			"*": ["./node_modules/*", "./src/types/*"]
 		},
 		"pretty": true,
 		"sourceMap": true,
@@ -31,16 +25,9 @@
 		"skipLibCheck": true,
 		"target": "es2017",
 		"traceResolution": false,
-		"types": [
-			"node"
-		]
+		"types": ["node"]
 	},
-	"include": [
-		"./src/**/*.ts"
-	],
-	"exclude": [
-		"node_modules/**",
-		"src/**/*spec.ts"
-	],
+	"include": ["./src/**/*.ts", "types/physical-cpu-count.d.ts"],
+	"exclude": ["node_modules/**", "src/**/*spec.ts"],
 	"compileOnSave": false
 }
