@@ -6,7 +6,7 @@ const path = require("path");
 // Ours
 const screenshot_consts_1 = require("./screenshot-consts");
 const DEFAULT_SELECTOR = 'body';
-async function screenshotGraphic(page, { route, nameAppendix = '', selector = DEFAULT_SELECTOR, entranceMethodName = '', entranceMethodArgs = [], additionalDelay = 0, before, replicantPrefills, }, { spinner, destinationDir, captureLogs = false, debug = false }) {
+async function screenshotGraphic(page, { route, nameAppendix = '', selector = DEFAULT_SELECTOR, entranceMethodName = '', entranceMethodArgs = [], additionalDelay = 0, before, replicantPrefills, }, { destinationDir, captureLogs = false, debug = false }) {
     const url = `http://127.0.0.1:${screenshot_consts_1.CONSTS.PORT}/${route}`;
     const screenshotFilename = `${computeFullTestCaseName({ route, nameAppendix })}.png`;
     const screenshotPath = path.join(destinationDir, screenshotFilename);
@@ -18,34 +18,21 @@ async function screenshotGraphic(page, { route, nameAppendix = '', selector = DE
     if (captureLogs) {
         page.on('console', (msg) => logs.push(msg.text()));
     }
-    if (spinner) {
-        spinner.text = `Navigating to ${url}...`;
-    }
     page.goto(url);
     await Promise.all([
         page.waitForNavigation({ waitUntil: 'load' }),
         page.waitForNavigation({ waitUntil: 'networkidle0' }),
     ]);
-    if (spinner) {
-        spinner.text = `Waiting until ${selector} is on the page...`;
-    }
     await page.waitForSelector(selector);
     const element = await page.$(selector);
     if (!element) {
-        spinner.fail(`Could not find ${selector} on the page.`);
         return;
-    }
-    if (spinner) {
-        spinner.text = 'Stubbing APIs...';
     }
     await page.evaluate(() => {
         // eslint-disable-next-line @typescript-eslint/no-empty-function
         window.nodecg.playSound = () => { };
     });
     if (replicantPrefills && Object.keys(replicantPrefills).length > 0) {
-        if (spinner) {
-            spinner.text = 'Prefilling replicants...';
-        }
         const prefilledReplicants = {};
         Object.entries(replicantPrefills).forEach(([key, value]) => {
             if (value === undefined) {
@@ -63,21 +50,15 @@ async function screenshotGraphic(page, { route, nameAppendix = '', selector = DE
                 const replicant = window.nodecg.Replicant(key);
                 replicant.status = 'declared';
                 replicant.value = value;
-                console.log('set %s to', key, value);
+                console.log(`set ${key} to`, value);
                 replicant.emit('change', value);
             });
         }, prefilledReplicants);
     }
     if (before) {
-        if (spinner) {
-            spinner.text = 'Running "before" method...';
-        }
         await before(page, element);
     }
     if (entranceMethodName && selector !== DEFAULT_SELECTOR) {
-        if (spinner) {
-            spinner.text = 'Waiting for entrance animation to complete...';
-        }
         await element.click(); // Necessary to get media to play in some circumstances.
         await page.$eval(selector, async (el, browserEntranceMethodName, browserEntranceArgs) => {
             return new Promise(resolve => {
@@ -117,29 +98,17 @@ async function screenshotGraphic(page, { route, nameAppendix = '', selector = DE
         }, entranceMethodName, entranceMethodArgs);
     }
     if (delay > 0) {
-        if (spinner) {
-            spinner.text = `Delaying for ${delay} milliseconds`;
-        }
         await sleep(delay);
-    }
-    if (spinner) {
-        spinner.text = 'Taking screenshot...';
     }
     await page.screenshot({
         path: screenshotPath,
         omitBackground: true,
     });
     if (captureLogs) {
-        if (spinner) {
-            spinner.text = 'Saving console logs...';
-        }
         const logPath = screenshotPath.replace(/\.png$/, '.log');
         fs.writeFileSync(logPath, logs.join('\n'));
     }
     if (!debug) {
-        if (spinner) {
-            spinner.text = 'Closing page...';
-        }
         await page.close();
     }
 }
