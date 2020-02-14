@@ -113,7 +113,7 @@ module.exports = {
 
 Yes! Just add an `additionalDelay` key to your test case.
 
-It might feel like this is a hack, but you'll probably find yourself needing to add at least a few hundred milliseconds of additional delay to _most_ of your tests. Graphics are hard.
+However, try to avoid leaning on this if you can. Needing to use this is often a sign that your graphic is too hard to test, and could benefit from some refactoring.
 
 ##### Example:
 
