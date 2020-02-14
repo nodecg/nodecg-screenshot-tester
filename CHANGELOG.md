@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="8.0.0"></a>
+# [8.0.0](https://github.com/nodecg/nodecg-screenshot-tester/compare/v7.0.0...v8.0.0) (2020-02-14)
+
+
+### Code Refactoring
+
+* remove all GSAP-specific code ([f00e67a](https://github.com/nodecg/nodecg-screenshot-tester/commit/f00e67a))
+
+
+### Features
+
+* enable full concurrency; remove ava dependency ([#7](https://github.com/nodecg/nodecg-screenshot-tester/issues/7)) ([633e98a](https://github.com/nodecg/nodecg-screenshot-tester/commit/633e98a))
+
+
+### BREAKING CHANGES
+
+* The dependency on ava has been removed, and `nodecg-screenshot-tester` is now a standalone tool. Please consult the README for updated usage instructions.
+* All code specific to GSAP has been removed, in an effort to further generalize this tool.
+
+What this means in practice is that if you are still running GSAP 2, then nodecg-screenshot-tester will no longer automatically detect when a Timeline or Tween is returned by your entranceMethod, and it will not wait for it to complete before taking the screenshot.
+
+However, nodecg-screenshot-tester does still detect when entranceMethod returns a Promise, and waits for that. GSAP 3 now has a .then method on all animations, so if you upgrade your codebase to GSAP 3 then you will get this functionality back. Else, you may need to wrap your GSAP 2 timelines in promises in your own codebase.
+
+
+
 <a name="7.0.0"></a>
 # [7.0.0](https://github.com/nodecg/nodecg-screenshot-tester/compare/v6.0.0...v7.0.0) (2020-02-13)
 
