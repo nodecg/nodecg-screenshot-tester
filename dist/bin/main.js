@@ -8,7 +8,6 @@ const path = require("path");
 const yargs = require("yargs");
 const pMap = require("p-map");
 const puppeteer = require("puppeteer");
-const ProgressBar = require("progress");
 const table_1 = require("table");
 const logSymbols = require("log-symbols");
 const { argv } = yargs.boolean(['debug', 'update']).string(['definitions']);
@@ -30,6 +29,7 @@ else {
     console.log('Update mode, updated screenshots will be saved.');
 }
 // Ours
+const progress_1 = require("../lib/progress");
 const server = require("../screenshot-server");
 const screenshot_consts_1 = require("../screenshot-consts");
 const screenshot_taker_1 = require("../screenshot-taker");
@@ -42,7 +42,7 @@ async function main() {
     await server.open();
     const browser = await puppeteer.launch(Object.assign(Object.assign({}, screenshot_consts_1.CONSTS.PUPPETEER_LAUNCH_OPTS), { headless: !DEBUG }));
     const filteredTestCases = util_1.filterTestCases(screenshot_consts_1.CONSTS.TEST_CASES, argv.filter);
-    const bar = new ProgressBar('[:bar] :current/:total (:percent) Time elapsed: :elapsed sec', {
+    const bar = new progress_1.ProgressBar('[:bar] :current/:total (:percent) Time elapsed: :elapsed sec', {
         total: filteredTestCases.length,
         width: 31,
     });
