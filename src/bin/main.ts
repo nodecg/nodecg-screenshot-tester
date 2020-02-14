@@ -8,7 +8,6 @@ import * as path from 'path';
 import * as yargs from 'yargs';
 import * as pMap from 'p-map';
 import * as puppeteer from 'puppeteer';
-import * as ProgressBar from 'progress';
 import { table } from 'table';
 import * as logSymbols from 'log-symbols';
 
@@ -33,6 +32,7 @@ if (TEST_ONLY) {
 }
 
 // Ours
+import { ProgressBar } from '../lib/progress';
 import * as server from '../screenshot-server';
 import { CONSTS, TestCase } from '../screenshot-consts';
 import { screenshotGraphic } from '../screenshot-taker';
