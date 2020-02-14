@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="8.0.1"></a>
+## [8.0.1](https://github.com/nodecg/nodecg-screenshot-tester/compare/v8.0.0...v8.0.1) (2020-02-14)
+
+
+### Bug Fixes
+
+* don't throw on non-TTY stdout ([#8](https://github.com/nodecg/nodecg-screenshot-tester/issues/8)) ([ab02a5e](https://github.com/nodecg/nodecg-screenshot-tester/commit/ab02a5e))
+
+
+
 <a name="8.0.0"></a>
 # [8.0.0](https://github.com/nodecg/nodecg-screenshot-tester/compare/v7.0.0...v8.0.0) (2020-02-14)
 
