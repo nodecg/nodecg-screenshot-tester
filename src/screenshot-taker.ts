@@ -7,7 +7,7 @@ import * as Puppeteer from 'puppeteer';
 
 // Ours
 import { CONSTS, TestCase } from './screenshot-consts';
-import { waitForNetworkIdle } from './wait-for-network-idle';
+import { calcTestCaseName, sleep, waitForNetworkIdle } from './util';
 
 const DEFAULT_SELECTOR = 'body';
 
@@ -33,7 +33,7 @@ export async function screenshotGraphic(
 	{ destinationDir, captureLogs = false, debug = false }: ScreenshotOptions,
 ): Promise<void> {
 	const url = `http://127.0.0.1:${CONSTS.PORT}/${route}`;
-	const screenshotFilename = `${computeFullTestCaseName({ route, nameAppendix })}.png`;
+	const screenshotFilename = `${calcTestCaseName({ route, nameAppendix })}.png`;
 	const screenshotPath = path.join(destinationDir, screenshotFilename);
 
 	let delay = additionalDelay;
@@ -146,46 +146,4 @@ export async function screenshotGraphic(
 	if (!debug) {
 		await page.close();
 	}
-}
-
-export function computeFullTestCaseName({ route, nameAppendix }: { route: string; nameAppendix?: string }): string {
-	let testName = route.split('/').pop();
-
-	if (testName) {
-		testName = testName.split('?')[0];
-	}
-
-	if (nameAppendix) {
-		testName += '-' + nameAppendix;
-	}
-
-	return testName ?? '';
-}
-
-export function computeTestCaseResolution(testCase: TestCase): { width: number; height: number } {
-	let width = CONSTS.DEFAULT_WIDTH;
-	let height = CONSTS.DEFAULT_HEIGHT;
-
-	const graphicManifest = CONSTS.BUNDLE_MANIFEST.nodecg.graphics.find((graphic: any) => {
-		if (!graphic || typeof graphic !== 'object') {
-			return false;
-		}
-
-		return testCase.route.endsWith(graphic.file);
-	});
-
-	if (graphicManifest) {
-		width = graphicManifest.width;
-		height = graphicManifest.height;
-	}
-
-	return { width, height };
-}
-
-async function sleep(milliseconds: number): Promise<void> {
-	return new Promise(resolve => {
-		setTimeout(() => {
-			resolve();
-		}, milliseconds);
-	});
 }
