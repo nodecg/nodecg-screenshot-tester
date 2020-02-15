@@ -87,7 +87,18 @@ async function main() {
             const newScreenshotPath = path.join(tempDir, `${testCaseFileName}.png`);
             const newScreenshot = await fs_1.promises.readFile(newScreenshotPath);
             if (existingScreenshot) {
-                const diff = await util_1.diffImages(newScreenshot, existingScreenshot);
+                let diff;
+                try {
+                    diff = await util_1.diffImages(newScreenshot, existingScreenshot);
+                }
+                catch (error) {
+                    if (error.message === 'Images are not the same resolution.' && !TEST_ONLY) {
+                        // Discard this error if we're not doing a test.
+                    }
+                    else {
+                        throw error;
+                    }
+                }
                 if (diff) {
                     if (TEST_ONLY) {
                         await fs_1.promises.writeFile(`${tempDir}/_DIFF-${testCaseFileName}.png`, diff);
