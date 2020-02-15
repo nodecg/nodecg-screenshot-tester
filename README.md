@@ -8,6 +8,10 @@ It's difficult to write tests for NodeCG graphics, or really any broadcast graph
 
 Screenshot tests aren't a complete solution, but they're pretty useful and are better than nothing. Ideally, you'd use them alongside traditional unit and integration tests.
 
+## Demo
+
+![Demo Image](media/demo.gif)
+
 ## Table of Contents
 
 -   [Requirements](#requirements)
