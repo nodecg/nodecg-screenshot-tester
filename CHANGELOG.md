@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="8.0.2"></a>
+## [8.0.2](https://github.com/nodecg/nodecg-screenshot-tester/compare/v8.0.1...v8.0.2) (2020-02-15)
+
+
+### Bug Fixes
+
+* fix "update" failing when existing resolution was different ([5aa94e6](https://github.com/nodecg/nodecg-screenshot-tester/commit/5aa94e6))
+
+
+
 <a name="8.0.1"></a>
 ## [8.0.1](https://github.com/nodecg/nodecg-screenshot-tester/compare/v8.0.0...v8.0.1) (2020-02-14)
 
