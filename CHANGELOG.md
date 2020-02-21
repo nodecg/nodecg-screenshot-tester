@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="8.0.3"></a>
+## [8.0.3](https://github.com/nodecg/nodecg-screenshot-tester/compare/v8.0.2...v8.0.3) (2020-02-21)
+
+
+### Bug Fixes
+
+* fix test failures not exiting with code 1 ([2b7a9f8](https://github.com/nodecg/nodecg-screenshot-tester/commit/2b7a9f8))
+
+
+
 <a name="8.0.2"></a>
 ## [8.0.2](https://github.com/nodecg/nodecg-screenshot-tester/compare/v8.0.1...v8.0.2) (2020-02-15)
 
