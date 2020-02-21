@@ -193,6 +193,15 @@ async function main(): Promise<void> {
 		server.close();
 		browser.close();
 	}
+
+	if (TEST_ONLY && !DEBUG) {
+		const numFailures = results.filter(result => {
+			return result.result === 'error' || result.result === 'updated';
+		});
+		if (numFailures.length > 0) {
+			process.exit(1);
+		}
+	}
 }
 
 function printGenerationReport(results: GenerationResult[]): void {
