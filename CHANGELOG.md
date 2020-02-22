@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="8.0.5"></a>
+## [8.0.5](https://github.com/nodecg/nodecg-screenshot-tester/compare/v8.0.4...v8.0.5) (2020-02-22)
+
+
+### Bug Fixes
+
+* create fixtures dir if it doesn't exist ([65c0549](https://github.com/nodecg/nodecg-screenshot-tester/commit/65c0549))
+
+
+
 <a name="8.0.4"></a>
 ## [8.0.4](https://github.com/nodecg/nodecg-screenshot-tester/compare/v8.0.3...v8.0.4) (2020-02-22)
 
