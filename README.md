@@ -45,14 +45,14 @@ To be completely blunt, the API for this is quirky and probably could be improve
     ```json
     {
     	"scripts": {
-    		"test-screenshots": "nodecg-screenshot-tester test/screenshots.js",
+    		"test-screenshots": "nodecg-screenshot-tester --definitions test/screenshots.js",
     		"update-screenshots": "npm run test-screenshots -- --update",
     		"debug-screenshots": "npm run test-screenshots -- --debug"
     	}
     }
     ```
 
-3. Create a `screenshots.js` file, which is where your test cases will be defined:
+3. Create a `test/screenshots.js` file, which is where your test cases will be defined:
 
     ```js
     // nodecg/bundles/your-bundle/test/screenshots.js
