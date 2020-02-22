@@ -1,6 +1,6 @@
 {
   "name": "nodecg-screenshot-tester",
-  "version": "8.0.3",
+  "version": "8.0.4",
   "description": "Automated visual regression testing of NodeCG graphics.",
   "scripts": {
     "test": "npm run static",

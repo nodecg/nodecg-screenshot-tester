@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="8.0.4"></a>
+## [8.0.4](https://github.com/nodecg/nodecg-screenshot-tester/compare/v8.0.3...v8.0.4) (2020-02-22)
+
+
+### Bug Fixes
+
+* **package:** remove unused peerDep ([ffbd503](https://github.com/nodecg/nodecg-screenshot-tester/commit/ffbd503))
+
+
+
 <a name="8.0.3"></a>
 ## [8.0.3](https://github.com/nodecg/nodecg-screenshot-tester/compare/v8.0.2...v8.0.3) (2020-02-21)
 
