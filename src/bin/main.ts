@@ -10,6 +10,7 @@ import * as pMap from 'p-map';
 import * as puppeteer from 'puppeteer';
 import { table } from 'table';
 import * as logSymbols from 'log-symbols';
+import mkdirp = require('mkdirp');
 
 const { argv } = yargs.boolean(['debug', 'update']).string(['definitions']);
 const DEBUG = argv.debug;
@@ -79,6 +80,8 @@ async function main(): Promise<void> {
 		bar.render();
 	}, 100);
 	const results: GenerationResult[] = [];
+
+	mkdirp.sync(CONSTS.FIXTURE_SCREENSHOTS_DIR);
 
 	await pMap(
 		filteredTestCases,

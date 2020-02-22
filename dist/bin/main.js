@@ -10,6 +10,7 @@ const pMap = require("p-map");
 const puppeteer = require("puppeteer");
 const table_1 = require("table");
 const logSymbols = require("log-symbols");
+const mkdirp = require("mkdirp");
 const { argv } = yargs.boolean(['debug', 'update']).string(['definitions']);
 const DEBUG = argv.debug;
 const TEST_ONLY = !argv.update;
@@ -50,6 +51,7 @@ async function main() {
         bar.render();
     }, 100);
     const results = [];
+    mkdirp.sync(screenshot_consts_1.CONSTS.FIXTURE_SCREENSHOTS_DIR);
     await pMap(filteredTestCases, async (testCase) => {
         const testCaseFileName = util_1.calcTestCaseName(testCase);
         const page = await browser.newPage();
