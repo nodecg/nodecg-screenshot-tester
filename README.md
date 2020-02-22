@@ -46,8 +46,8 @@ To be completely blunt, the API for this is quirky and probably could be improve
     {
     	"scripts": {
     		"test-screenshots": "nodecg-screenshot-tester test/screenshots.js",
-    		"update-screenshots": "test-screenshots -- --update",
-    		"debug-screenshots": "test-screenshots -- --debug"
+    		"update-screenshots": "npm run test-screenshots -- --update",
+    		"debug-screenshots": "npm run test-screenshots -- --debug"
     	}
     }
     ```
