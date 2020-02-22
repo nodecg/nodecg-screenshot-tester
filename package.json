@@ -63,9 +63,6 @@
     "ts-node": "^8.6.2",
     "typescript": "^3.7.5"
   },
-  "peerDependencies": {
-    "ava": "^1.2.0"
-  },
   "bin": {
     "nodecg-screenshot-tester": "dist/bin/main.js"
   },
