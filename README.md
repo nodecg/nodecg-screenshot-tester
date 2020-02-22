@@ -170,7 +170,7 @@ module.exports = {
 
 ## <a name="custom-routes"></a> What if my graphic relies on HTTP routes not provided by `nodecg-screenshot-tester`?
 
-You can provide a `CUSTOM_ROUTES` key in your `screenshot-consts.js` export. Routes are handled by [`express`](https://expressjs.com/), so refer to its docs for more details on how to write a route.
+You can provide a `CUSTOM_ROUTES` key in your screenshot definitions export. Routes are handled by [`express`](https://expressjs.com/), so refer to its docs for more details on how to write a route.
 
 ##### Example:
 
