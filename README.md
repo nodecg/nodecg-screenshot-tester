@@ -97,6 +97,8 @@ If your element's entrance method returns a Promise, `nodecg-screenshot-tester` 
 
 > 🧦 Do you use [GSAP](https://greensock.com/) to write your animations? [As of version 3](https://greensock.com/3-migration/), GSAP timelines and tweens are all `thenable`, meaning that `nodecg-screenshot-tester` can await them the same way it would any normal Promise!
 
+> ❓ Does this method of invoking animations not work with your graphics? Try using the [`before` and/or `after`](#arbitrary-code) hooks to run arbitrary code instead. You may find yourself needing to take this route if you use React, Vue, or other similar frontend frameworks.
+
 ##### Example:
 
 ```js
