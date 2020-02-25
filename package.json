@@ -30,7 +30,6 @@
     "pixelmatch": "^4.0.2",
     "pngjs": "^3.4.0",
     "progress": "^2.0.3",
-    "puppeteer": "^1.15.0",
     "table": "^5.4.6",
     "tmp": "0.0.33",
     "tslib": "^1.9.1",
@@ -62,6 +61,9 @@
     "trash-cli": "^1.4.0",
     "ts-node": "^8.6.2",
     "typescript": "^3.7.5"
+  },
+  "peerDependencies": {
+    "puppeteer": "1 - 2"
   },
   "bin": {
     "nodecg-screenshot-tester": "dist/bin/main.js"
