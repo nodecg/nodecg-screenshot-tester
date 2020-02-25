@@ -16,11 +16,10 @@ Screenshot tests aren't a complete solution, but they're pretty useful and are b
 
 -   [Requirements](#requirements)
 -   [How do I use it in my bundle?](#bundle-usage)
--   [How do I test my animations?](#animation-testing)
 -   [Can I delay the screenshot?](#delay)
 -   [How do I populate Replicants for testing?](#populating-replicants)
 -   [What if my graphic relies on HTTP routes not provided by `nodecg-screenshot-tester`?](#custom-routes)
--   [Can I run arbitrary code as part of my test?](#arbitrary-code)
+-   [Can I run arbitrary code as part of my test, such as playing animations?](#arbitrary-code)
 -   [How do I run only a subset of my test cases?](#filter-cases)
 -   [How do I author my test definitions in TypeScript?](#typescript)
 -   [Are there other things I can do in my test cases?](#other)
@@ -89,32 +88,6 @@ To be completely blunt, the API for this is quirky and probably could be improve
 
 7. With any luck, you will now have one passing screenshot test! 🙌
 
-## <a name="animation-testing"></a> How do I test my animations?
-
-You can provide a `selector`, `entranceMethodName` and optional `entranceMethodArgs` in your test cases. `nodecg-screenshot-tester` will find `selector` on your page and invoke that method on it with the provided args. This works with graphics made with a component framework, such as [React](https://reactjs.org/), [Polymer](https://www.polymer-project.org/), [Vue.js](https://vuejs.org/), etc.
-
-If your element's entrance method returns a Promise, `nodecg-screenshot-tester` will wait for that Promise to resolve before taking the screesnhot.
-
-> 🧦 Do you use [GSAP](https://greensock.com/) to write your animations? [As of version 3](https://greensock.com/3-migration/), GSAP timelines and tweens are all `thenable`, meaning that `nodecg-screenshot-tester` can await them the same way it would any normal Promise!
-
-> ❓ Does this method of invoking animations not work with your graphics? Try using the [`before` and/or `after`](#arbitrary-code) hooks to run arbitrary code instead. You may find yourself needing to take this route if you use React, Vue, or other similar frontend frameworks.
-
-##### Example:
-
-```js
-// nodecg/bundles/your-bundle/test/screenshots.js
-module.exports = {
-	TEST_CASES: [
-		{
-			route: 'bundles/your-bundle/graphics/example.html',
-			selector: 'my-root-element',
-			entranceMethodName: 'enter',
-			entranceMethodArgs: ['foo', 123, { bar: 'baz' }],
-		},
-	],
-};
-```
-
 ## <a name="delay"></a> Can I delay the screenshot?
 
 Yes! Just add an `additionalDelay` key to your test case.
@@ -133,8 +106,10 @@ module.exports = {
 		},
 		{
 			route: 'bundles/your-bundle/graphics/example2.html',
-			entranceMethodName: 'enter',
-			additionalDelay: 1000, // Delays for 1000 milliseconds after entranceMethod has resolved.
+			before() {
+				console.log('executed before');
+			}
+			additionalDelay: 1000, // Delays for 1000 milliseconds after `before` has resolved.
 		},
 	],
 };
@@ -221,11 +196,9 @@ module.exports = {
 };
 ```
 
-## <a name="arbitrary-code"></a> Can I run arbitrary code as part of my test?
+## <a name="arbitrary-code"></a> Can I run arbitrary code as part of my test, such as playing animations?
 
-Yes! You can provide `before` and `after` methods in your test case. Both of them are run before the screenshot is taken.
-
-`before` will be run before the entrance method, if you provided a `selector` and `entranceMethodName`. `after` is run after the entrance method.
+Yes! You can provide `before` and `after` methods in your test case. `before` runs before the screenshot is taken, and `after` runs after the screenshot is taken.
 
 `before` and `after` methods should accept two arguments: `page` and `element`. These methods run in the Node.js server context, but you can easily run code in the Chromium browser context via methods such as [`page.evaluate`](https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#pageevaluatepagefunction-args).
 
@@ -234,6 +207,8 @@ Yes! You can provide `before` and `after` methods in your test case. Both of the
 `element` is an optional argument which will only be defined if your test case specified a `selector`. If your selector was found on the page, `element` will be the [Puppeteer ElementHandle](https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#class-elementhandle) for your element.
 
 Your `before` and `after` methods may return a Promise, which also means it can be an `async` method!
+
+> 🧦 Do you use [GSAP](https://greensock.com/) to write your animations? [As of version 3](https://greensock.com/3-migration/), GSAP timelines and tweens are all `thenable`, meaning that `nodecg-screenshot-tester` can await them the same way it would any normal Promise! Just have your `before` method return a GSAP animation, and it'll wait until that animation has completed before taking the screenshot.
 
 ##### Example:
 

@@ -23,8 +23,6 @@ export async function screenshotGraphic(
 		route,
 		nameAppendix = '',
 		selector = DEFAULT_SELECTOR,
-		entranceMethodName = '',
-		entranceMethodArgs = [],
 		additionalDelay = 0,
 		before,
 		after,
@@ -96,37 +94,6 @@ export async function screenshotGraphic(
 		await before(page, element);
 	}
 
-	if (entranceMethodName && selector !== DEFAULT_SELECTOR) {
-		await element.click(); // Necessary to get media to play in some circumstances.
-		await page.$eval(
-			selector,
-			async (el, browserEntranceMethodName, browserEntranceArgs) => {
-				return new Promise(resolve => {
-					const entranceMethod = el[browserEntranceMethodName as keyof Element];
-					if (typeof entranceMethod !== 'function') {
-						throw new Error(`Entrance method ${String(browserEntranceMethodName)} not found on element.`);
-					}
-
-					let entranceResult = (entranceMethod as any).apply(el, browserEntranceArgs);
-					if (entranceResult.then && typeof entranceResult.then === 'function') {
-						// Handle entrance methods which return a Promise.
-						entranceResult.then(() => {
-							resolve();
-						});
-					} else {
-						resolve();
-					}
-				});
-			},
-			entranceMethodName,
-			entranceMethodArgs,
-		);
-	}
-
-	if (after) {
-		await after(page, element);
-	}
-
 	if (delay > 0) {
 		await sleep(delay);
 	}
@@ -137,6 +104,10 @@ export async function screenshotGraphic(
 		path: screenshotPath,
 		omitBackground: true,
 	});
+
+	if (after) {
+		await after(page, element);
+	}
 
 	if (captureLogs) {
 		const logPath = screenshotPath.replace(/\.png$/, '.log');

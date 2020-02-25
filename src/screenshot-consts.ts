@@ -21,8 +21,6 @@ export interface TestCase {
 	nameAppendix?: string;
 	selector?: string;
 	additionalDelay?: number;
-	entranceMethodName?: string;
-	entranceMethodArgs?: any[];
 	replicantPrefills?: { [key: string]: any };
 	before?: (page: puppeteer.Page, element?: puppeteer.ElementHandle) => any;
 	after?: (page: puppeteer.Page, element?: puppeteer.ElementHandle) => any;

@@ -7,7 +7,7 @@ const path = require("path");
 const screenshot_consts_1 = require("./screenshot-consts");
 const util_1 = require("./util");
 const DEFAULT_SELECTOR = 'body';
-async function screenshotGraphic(page, { route, nameAppendix = '', selector = DEFAULT_SELECTOR, entranceMethodName = '', entranceMethodArgs = [], additionalDelay = 0, before, after, replicantPrefills, }, { destinationDir, captureLogs = false, debug = false }) {
+async function screenshotGraphic(page, { route, nameAppendix = '', selector = DEFAULT_SELECTOR, additionalDelay = 0, before, after, replicantPrefills, }, { destinationDir, captureLogs = false, debug = false }) {
     const url = `http://127.0.0.1:${screenshot_consts_1.CONSTS.PORT}/${route}`;
     const screenshotFilename = `${util_1.calcTestCaseName({ route, nameAppendix })}.png`;
     const screenshotPath = path.join(destinationDir, screenshotFilename);
@@ -59,30 +59,6 @@ async function screenshotGraphic(page, { route, nameAppendix = '', selector = DE
     if (before) {
         await before(page, element);
     }
-    if (entranceMethodName && selector !== DEFAULT_SELECTOR) {
-        await element.click(); // Necessary to get media to play in some circumstances.
-        await page.$eval(selector, async (el, browserEntranceMethodName, browserEntranceArgs) => {
-            return new Promise(resolve => {
-                const entranceMethod = el[browserEntranceMethodName];
-                if (typeof entranceMethod !== 'function') {
-                    throw new Error(`Entrance method ${String(browserEntranceMethodName)} not found on element.`);
-                }
-                let entranceResult = entranceMethod.apply(el, browserEntranceArgs);
-                if (entranceResult.then && typeof entranceResult.then === 'function') {
-                    // Handle entrance methods which return a Promise.
-                    entranceResult.then(() => {
-                        resolve();
-                    });
-                }
-                else {
-                    resolve();
-                }
-            });
-        }, entranceMethodName, entranceMethodArgs);
-    }
-    if (after) {
-        await after(page, element);
-    }
     if (delay > 0) {
         await util_1.sleep(delay);
     }
@@ -91,6 +67,9 @@ async function screenshotGraphic(page, { route, nameAppendix = '', selector = DE
         path: screenshotPath,
         omitBackground: true,
     });
+    if (after) {
+        await after(page, element);
+    }
     if (captureLogs) {
         const logPath = screenshotPath.replace(/\.png$/, '.log');
         fs.writeFileSync(logPath, logs.join('\n'));
