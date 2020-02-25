@@ -1,2 +1,2 @@
 /// <reference types="node" />
-export declare function diffImages(a: Buffer, b: Buffer): Promise<Buffer | void>;
+export declare function diffImages(a: Buffer, b: Buffer, threshold: number): Promise<Buffer | void>;

@@ -17,7 +17,7 @@ async function parsePng(buffer) {
         });
     });
 }
-async function diffImages(a, b) {
+async function diffImages(a, b, threshold) {
     const resultImage = await parsePng(a);
     const fixtureImage = await parsePng(b);
     // The images should be the same resolution.
@@ -29,7 +29,7 @@ async function diffImages(a, b) {
         width: resultImage.width,
         height: fixtureImage.height,
     });
-    const numDiffPixels = pixelmatch(resultImage.data, fixtureImage.data, diff.data, resultImage.width, resultImage.height, { threshold: 0.1 });
+    const numDiffPixels = pixelmatch(resultImage.data, fixtureImage.data, diff.data, resultImage.width, resultImage.height, { threshold });
     if (numDiffPixels > 0) {
         return pngjs_1.PNG.sync.write(diff);
     }
