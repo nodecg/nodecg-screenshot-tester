@@ -16,7 +16,7 @@ const { argv } = yargs
     .string(['definitions'])
     .option('threshold', {
     type: 'number',
-    describe: 'Matching threshold, ranges from 0 to 1. Smaller values make the comparison more sensitive. 0.1 by default.',
+    describe: 'Matching threshold, ranges from 0 to 1. Smaller values make the comparison more sensitive. 0 by default.',
     default: 0,
 });
 const DEBUG = argv.debug;
