@@ -33,10 +33,10 @@ Screenshot tests aren't a complete solution, but they're pretty useful and are b
 
 To be completely blunt, the API for this is quirky and probably could be improved. But, it does work and has been successfully used for major broadcasts.
 
-1. Add `nodecg-screenshot-tester` as a devDependency in your bundle:
+1. Add `nodecg-screenshot-tester` and `puppeteer` as a devDependencies in your bundle:
 
     ```bash
-    npm i -D nodecg-screenshot-tester
+    npm i -D nodecg-screenshot-tester puppeteer
     ```
 
 2. Add these scripts to the `scripts` stanza in your bundle's `package.json` :
