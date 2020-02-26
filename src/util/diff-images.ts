@@ -17,7 +17,7 @@ async function parsePng(buffer: Buffer): Promise<PNG> {
 	});
 }
 
-export async function diffImages(a: Buffer, b: Buffer): Promise<Buffer | void> {
+export async function diffImages(a: Buffer, b: Buffer, threshold: number): Promise<Buffer | void> {
 	const resultImage = await parsePng(a);
 	const fixtureImage = await parsePng(b);
 
@@ -37,7 +37,7 @@ export async function diffImages(a: Buffer, b: Buffer): Promise<Buffer | void> {
 		diff.data,
 		resultImage.width,
 		resultImage.height,
-		{ threshold: 0.1 },
+		{ threshold },
 	);
 
 	if (numDiffPixels > 0) {

@@ -11,7 +11,14 @@ const puppeteer = require("puppeteer");
 const table_1 = require("table");
 const logSymbols = require("log-symbols");
 const mkdirp = require("mkdirp");
-const { argv } = yargs.boolean(['debug', 'update']).string(['definitions']);
+const { argv } = yargs
+    .boolean(['debug', 'update'])
+    .string(['definitions'])
+    .option('threshold', {
+    type: 'number',
+    describe: 'Matching threshold, ranges from 0 to 1. Smaller values make the comparison more sensitive. 0 by default.',
+    default: 0,
+});
 const DEBUG = argv.debug;
 const TEST_ONLY = !argv.update;
 global.testDefPath = path.resolve(argv.definitions);
@@ -91,7 +98,7 @@ async function main() {
             if (existingScreenshot) {
                 let diff;
                 try {
-                    diff = await util_1.diffImages(newScreenshot, existingScreenshot);
+                    diff = await util_1.diffImages(newScreenshot, existingScreenshot, argv.threshold);
                 }
                 catch (error) {
                     if (error.message === 'Images are not the same resolution.' && !TEST_ONLY) {
