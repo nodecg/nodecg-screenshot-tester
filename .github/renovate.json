@@ -4,5 +4,6 @@
 		":semanticCommits",
 		":dependencyDashboardApproval"
 	],
+	"rangeStrategy": "bump",
 	"postUpdateOptions": ["npmDedupe"]
 }
