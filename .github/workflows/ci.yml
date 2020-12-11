@@ -2,11 +2,7 @@ name: CI
 
 on:
   push:
-    branches:
-      - 8.x.x
   pull_request:
-    branches:
-      - 8.x.x
 
 jobs:
   test:
@@ -19,8 +15,7 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: npm run build
-      - run: npx semantic-release
-        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
+      - run: npx semantic-release || true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
