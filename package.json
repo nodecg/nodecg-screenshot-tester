@@ -33,7 +33,7 @@
     "table": "^5.4.6",
     "tmp": "0.0.33",
     "tslib": "^1.9.1",
-    "yargs": "^11.0.0"
+    "yargs": "^13.0.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^7.5.2",
